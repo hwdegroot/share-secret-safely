@@ -8,6 +8,11 @@ Run locally
 
     make run
 
+When running in production, make sure to use a different `ENCRYPTION_SALT`. You can generate one, using
+`Fernet.generate_key()`.
+
+More info in the [cryptography docs](https://pypi.org/project/cryptography/)
+
 ## Update database
 
 run
