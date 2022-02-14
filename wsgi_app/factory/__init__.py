@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 import logging
 from flask import Flask
 from flask.logging import default_handler
@@ -10,11 +11,11 @@ db_host = os.getenv("POSTGRES_HOST")
 db_port = os.getenv("POSTGRES_PORT")
 db_database = os.getenv("POSTGRES_DB")
 
+
 class Factory:
     def __init__(self, **kwargs):
         self.app = self.create_app(**kwargs)
         self.db = self.get_db()
-
 
     def get_db(self, app=None):
         if not hasattr(self, "db") or self.db is None:
@@ -25,14 +26,14 @@ class Factory:
 
         return self.db
 
-
     def create_app(self, **kwargs):
         if hasattr(self, 'app') and self.app is not None:
             return self.app
 
         self.app = Flask(__name__, **kwargs)
         self.app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{db_user}:{db_passwd}@{db_host}:{db_port}/{db_database}"
-        self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv("SQLALCHEMY_TRACK_MODIFICATIONS")
+        self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv(
+            "SQLALCHEMY_TRACK_MODIFICATIONS")
         self.app.config["APP_SECRET_KEY"] = os.getenv("APP_SECRET_KEY")
 
         self.db = self.get_db(self.app)
@@ -50,6 +51,4 @@ class Factory:
         ):
             logger.addHandler(default_handler)
 
-
         return self.app.logger
-

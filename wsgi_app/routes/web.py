@@ -22,9 +22,11 @@ from wsgi_app.exceptions import (
     SecretAlreadyViewedException
 )
 
+
 @app.route('/robots.txt')
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
+
 
 @app.route("/")
 def index():
@@ -77,9 +79,9 @@ def stored_secret():
     link = create_secret_link(secret_id)
     # return hash
     return render_template(
-            "stored_secret.html",
-            link=link
-        )
+        "stored_secret.html",
+        link=link
+    )
 
 
 @app.errorhandler(NotFound)
@@ -90,5 +92,3 @@ def not_found(e):
 @app.errorhandler(Forbidden)
 def forbidden(e):
     return render_template('403.html'), 404
-
-

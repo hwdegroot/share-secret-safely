@@ -3,7 +3,8 @@ from flask import (
     request,
     url_for,
 )
-import os, re
+import os
+import re
 from wsgi_app import cipher, db, app
 from wsgi_app.models import Secret
 from wsgi_app.exceptions import (
@@ -79,7 +80,7 @@ def is_valid_guid(value):
 
     # If the string is empty
     # return false
-    if str == None:
+    if str is None:
         return False
 
     # Return if the string

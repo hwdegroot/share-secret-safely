@@ -28,5 +28,6 @@ def upgrade():
         sa.Column('updated_at', sa.DateTime(timezone=True), onupdate=func.now())
     )
 
+
 def downgrade():
     op.drop_table('secrets')

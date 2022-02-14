@@ -19,6 +19,7 @@ from wsgi_app.exceptions import (
 
 API_PREFIX = "/api/v1"
 
+
 @app.route("/api/v1/secret/store", methods=["POST"])
 def api_store():
     """

@@ -16,10 +16,8 @@ class Secret(db.Model):
         self.id = uuid.uuid4()
         self.password_hash = password_hash
 
-
     def __repr__(self):
         return self.__str__()
-
 
     def __str__(self):
         return str({
@@ -28,4 +26,3 @@ class Secret(db.Model):
             "created_at": self.created_at,
             "updated_at": self.updated_at
         })
-
