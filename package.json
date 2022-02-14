@@ -1,0 +1,22 @@
+{
+    "name": "secret-sharing",
+    "version": "1.0.0",
+    "description": "Share your secrets, safely",
+    "scripts": {
+        "compile": "npx tailwindcss -i wsgi_app/static/src/style.css -o wsgi_app/static/css/main.css",
+        "prewatch": "npm install",
+        "watch": "nodemon --watch wsgi_app/static/src --watch wsgi_app/templates --exec 'npm run compile'"
+    },
+    "author": "Rik de Groot",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://gitlab.com/financiallease/secret-sharing/issues"
+    },
+    "nodemonConfig": {
+        "ext": "js,html,htm,css"
+    },
+    "dependencies": {
+        "nodemon": "^2.0.15",
+        "tailwindcss": "^3.0.22"
+    }
+}

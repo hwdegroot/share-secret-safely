@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}🔐 Share a secret safely{% endblock %}}
+{% block toast %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p
+                    id="error-message"
+                    class="
+                        bg-red-100
+                        rounded-lg
+                        py-5
+                        px-6
+                        mb-4
+                        text-base
+                        text-red-700
+                        mb-3
+                        transition duration-150 ease-in-out
+                    "
+                        role="alert"
+                    >
+                   {{ message }}
+                </p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
+{% block content %}
+<form method="post" action="/store">
+    <h5 class="text-slate-900 dark:text-blue-600 text-xl leading-tight font-medium mb-2">Paste a secret to share</h5>
+    <p class="text-black dark:text-white">
+    Use this to share a secret with someone. You can put the secret in the textarea.
+    The secret will be encrypted using <a
+        class="text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out"
+        href="https://cryptography.io/en/latest/">Fernet symmetric encryption</a>.
+    You will get a link to view the password only once. Do not open the link yourself before
+    sharing, because then the person the password is shared with cannot view again.
+    </p>
+    <br />
+    <label
+        for="secret"
+        class="text-black dark:text-blue-700"
+    >
+        Insert secret (max 5000)
+    </label>
+    <textarea
+        required
+        placeholder="Put your secret here, it's safe"
+        name="secret"
+        class="
+               blur:invalid:border-red-500
+               dark:placeholder:text-slate-500
+               mt-4
+               form-control
+               block
+               w-full
+               h-60
+               px-1.5
+               py-1.5
+               text-base
+               font-normal
+               text-gray-700 dark:text-white
+               bg-white dark:bg-slate-700 bg-clip-padding
+               border border-solid border-gray-300 dark:border-blue-600
+               rounded
+               transition ease-in-out
+               focus:outline-0
+               focus:text-gray-700 focus:bg-slate-100 focus:border-blue-600 focus:border-x-2 focus:border-y-2 focus:outline-none
+               dark:focus:placeholder:text-slate-500 dark:focus:bg-slate-300 dark:focus:text-gray-700
+        "
+    ></textarea>
+    <button
+        data-mdb-ripple="true" data-mdb-ripple-color="light"
+        type="submit"
+        class="
+            inline-block
+            mt-4
+            px-6
+            py-2.5
+            bg-blue-600
+            text-white font-medium text-xs leading-tight uppercase
+            rounded
+            shadow-md
+            hover:bg-blue-700 hover:shadow-lg
+            focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+            active:bg-blue-800 active:shadow-lg
+            transition duration-150 ease-in-out
+        "
+    >
+        Lock my secret safe
+    </button>
+</form>
+{% endblock %}

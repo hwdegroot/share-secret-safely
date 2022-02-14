@@ -1,0 +1,6 @@
+*.orig
+*.sw[a-z]
+.vscode/
+__pycache__/
+wsgi_app/static/css/main.css
+node_modules/

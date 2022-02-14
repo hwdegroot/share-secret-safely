@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+    postgres:
+        image: postgres
+        restart: always
+        environment: &environment # we want to resuse these vars
+            POSTGRES_PASSWORD: secret # The postgres password (needed to connect to database)
+            POSTGRES_USER:  dbuser # The PostgreSQL user (useful to connect to the database)
+            POSTGRES_DB: default_db # The PostgreSQL default database (automatically created at first launch)
+            POSTGRES_PORT: 5432
+        volumes:
+            - dbfiles:/var/lib/postgresql/data
+        healthcheck:
+            # We want to know that our database and table is ready to accept connections before
+            # we continue. In this way it is safe to run the migrations
+            # If we want to use our environment here, we need to get a bash shell first
+            test: [ "CMD", "bash", "-c", "pg_isready -q -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+            timeout: 10s
+            interval: 3s
+            retries: 10
+    npm:
+        image: node
+        command: ["npm", "run", "watch"]
+        working_dir: /var/current
+        volumes:
+            - $PWD:/var/current
+            - nodemodules:/var/current/node_modules
+    app:
+        image: registry.gitlab.com/hwdegroot/secret-sharing:python-3.9
+        build: .
+        command: ["bash", "-c", "/var/current/run.sh"]
+        ports:
+            - "8080:8080"
+        volumes:
+            - $PWD:/var/current
+        depends_on:
+            postgres:
+                condition: service_healthy
+        environment:
+            <<: *environment
+            POSTGRES_HOST: postgres
+            SQLALCHEMY_TRACK_MODIFICATIONS: False
+            FLASK_APP: wsgi_app
+            FLASK_ENV: development
+            FLASK_DEBUG: True
+            FLASK_RUN_HOST: 0.0.0.0
+            FLASK_RUN_PORT: 8080
+            ENCRYPTION_SALT: 6tBFpnZMNH-v4ZXPr5dhT-u65XUJzmH8XmzrhZ89v64=
+            APP_SECRET_KEY: supersecretkey
+volumes:
+    dbfiles: {}
+    nodemodules: {}
