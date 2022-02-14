@@ -1,6 +1,13 @@
 # Secret sharing
 
-Share secrets safely
+Need a safe way to share secrets with people. With this tool you can lock a secret safely encrypted, available to
+view only once.
+
+Also supports an api to lock and share secrets.
+
+Build with [Python-Flask](https://flask.palletsprojects.com/en/2.0.x/) and [tailwindcss](https://tailwindcss.com/)
+
+Share secrets safely.
 
 ## Getting started
 
