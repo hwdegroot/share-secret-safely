@@ -4,6 +4,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    send_from_directory,
     url_for,
 )
 from werkzeug.exceptions import Forbidden, NotFound
@@ -21,6 +22,9 @@ from wsgi_app.exceptions import (
     SecretAlreadyViewedException
 )
 
+@app.route('/robots.txt')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 @app.route("/")
 def index():
