@@ -12,6 +12,19 @@ clean: stop
 stop:
 	docker-compose down
 
+autoformat:
+	docker-compose exec app autopep8 \
+		--in-place \
+		--ignore E402 \
+		--max-line-length 100 \
+		--aggressive \
+		--aggressive \
+		--recursive \
+		wsgi_app
+
+run_test:
+	docker-compose exec app python wsgi_app/test/run_tests.py
+
 wipe:
 	docker-compose down --rmi all --volumes
 

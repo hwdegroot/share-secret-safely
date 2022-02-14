@@ -1,24 +1,43 @@
 stages:
     - test
-lint:
-    stage: test
-    script:
-        - echo "pass"
-test:unit:
+
+# python template
+.python:
     stage: test
     image: python:3.9-slim
-    variables:
-        APP_SECRET_KEY: supersecretkey
-        ENCRYPTION_SALT: _y4nTJVIyUJ7fkZYm2OnT5AYHYS_2YAq3gGQOSW80sI=
-        SQLALCHEMY_TRACK_MODIFICATIONS: "False"
-    script:
+    before_script:
         - apt-get update -qq
         - apt-get install -qqy
             build-essential
             libpq-dev
             python3-psycopg2
         - pip install -r requirements-dev.txt
+
+# lint using autopep8
+lint:
+    extends: .python
+    script:
+        - autopep8
+            --diff
+            --max-line-length 100
+            --ignore E402
+            --exit-code
+            --aggressive
+            --aggressive
+            --recursive
+            wsgi_app
+
+# unit test
+test:unit:
+    extends: .python
+    stage: test
+    variables:
+        APP_SECRET_KEY: supersecretkey
+        ENCRYPTION_SALT: _y4nTJVIyUJ7fkZYm2OnT5AYHYS_2YAq3gGQOSW80sI=
+        SQLALCHEMY_TRACK_MODIFICATIONS: "False"
+    script:
         - python wsgi_app/test/run_tests.py
+
 sast:
     stage: test
 include:
