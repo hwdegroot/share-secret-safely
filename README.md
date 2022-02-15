@@ -78,3 +78,9 @@ The api call will return a json with your secret
 Run the unittest like so
 
     python wsgi_app/run_test.py
+
+## Heroku local
+
+    pipenv install
+    pipenv shell
+    heroku local web --env=.env.local
