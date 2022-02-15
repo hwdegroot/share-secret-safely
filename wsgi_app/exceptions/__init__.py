@@ -8,3 +8,7 @@ class SecretAlreadyViewedException(Exception):
 
 class InvalidSecretIdentifierException(Exception):
     pass
+
+
+class SecretExpiredException(Exception):
+    pass

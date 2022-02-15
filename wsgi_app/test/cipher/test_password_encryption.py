@@ -16,7 +16,8 @@ from wsgi_app.routes.utils import (
 from wsgi_app.exceptions import (
     InvalidSecretIdentifierException,
     SecretNotFoundException,
-    SecretAlreadyViewedException
+    SecretAlreadyViewedException,
+    SecretExpiredException
 )
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from cryptography.fernet import Fernet
@@ -55,6 +56,11 @@ class TestPasswordEncoding(unittest.TestCase):
         secret_value = obtain_secret(secret.id, session=self.session)
 
         self.assertEqual(SECRET, secret_value)
+
+    def test_decrypting_hashed_secret_ttl_expired_should_throw_SecretExpiredException(self):
+        secret_id = store_secret("secret", ttl=-10, session=self.session)
+
+        self.assertRaises(SecretExpiredException, obtain_secret, secret_id, self.session)
 
     def test_decrypting_hashed_secret_second_time_should_throw_SecretAlreadyViewedException(self):
         secret_id = store_secret("secret", session=self.session)

@@ -14,7 +14,8 @@ from .utils import (
 from wsgi_app.exceptions import (
     InvalidSecretIdentifierException,
     SecretNotFoundException,
-    SecretAlreadyViewedException
+    SecretAlreadyViewedException,
+    SecretExpiredException
 )
 
 API_PREFIX = "/api/v1"
@@ -55,6 +56,11 @@ def api_get_secret(secret_id):
     except SecretAlreadyViewedException:
         return jsonify({
             "error": f"Secret {secret_id} has already been viewed",
+        }), 403
+
+    except SecretExpiredException:
+        return jsonify({
+            "error": f"Secret {secret_id} viewing has expired",
         }), 403
 
     return jsonify({

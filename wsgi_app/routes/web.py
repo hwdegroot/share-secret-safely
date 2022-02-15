@@ -19,7 +19,8 @@ from .utils import (
 from wsgi_app.exceptions import (
     InvalidSecretIdentifierException,
     SecretNotFoundException,
-    SecretAlreadyViewedException
+    SecretAlreadyViewedException,
+    SecretExpiredException
 )
 
 
@@ -43,6 +44,8 @@ def secret(secret_id):
         abort(404, f"Secret {secret_id} does not exist")
     except SecretAlreadyViewedException:
         abort(403, f"Secret{secret_id} has already been viewed")
+    except SecretExpiredException:
+        abort(403, f"Secret{secret_id} viewing has expired")
 
     return render_template("show_secret.html", secret=secret)
 

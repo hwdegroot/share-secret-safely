@@ -5,12 +5,14 @@ from flask import (
 )
 import os
 import re
+from cryptography.fernet import InvalidToken
 from wsgi_app import cipher, db, app
 from wsgi_app.models import Secret
 from wsgi_app.exceptions import (
     InvalidSecretIdentifierException,
     SecretNotFoundException,
-    SecretAlreadyViewedException
+    SecretAlreadyViewedException,
+    SecretExpiredException
 )
 
 
@@ -23,7 +25,7 @@ def create_secret_link(secret_id, **kwargs):
     )
 
 
-def store_secret(secret_value, session=None):
+def store_secret(secret_value, ttl=None, session=None):
     # set the session when not set, so we can inject in testing
     if session is None:
         session = db.session
@@ -32,8 +34,7 @@ def store_secret(secret_value, session=None):
     token = cipher.encrypt(bytes(secret_value, "utf-8"))
 
     # Create a secret object from the string
-    secret = Secret(bytes.decode(token), ttl=0)
-    logger.info(secret)
+    secret = Secret(bytes.decode(token), ttl=ttl)
 
     # actually store the secret
     session.add(secret)
@@ -62,7 +63,14 @@ def obtain_secret(secret_id, session=None):
     if secret.encoded_secret is None:
         raise SecretAlreadyViewedException(403)
 
-    secret_value = cipher.decrypt(secret.encoded_secret.encode(), ttl=secret.ttl)
+    try:
+        secret_value = cipher.decrypt(secret.encoded_secret.encode(), ttl=secret.ttl)
+    except InvalidToken:
+        secret.encoded_secret = None
+        session.add(secret)
+        session.commit()
+        raise SecretExpiredException(403)
+
     # set the value to None so we know it has been viewed
     secret.encoded_secret = None
     session.add(secret)
