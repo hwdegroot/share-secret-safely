@@ -1,5 +1,7 @@
 stages:
+    - lint
     - test
+    - build
 
 # python template
 .python:
@@ -37,6 +39,19 @@ test:unit:
         SQLALCHEMY_TRACK_MODIFICATIONS: "False"
     script:
         - python wsgi_app/test/run_tests.py
+
+build:css:
+    image: node
+    stage: build
+    script:
+        - npx tailwindcss -i wsgi_app/static/src/style.css -o wsgi_app/static/css/main.css
+
+    artifacts:
+        name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+        paths:
+            - wsgi_app/static/
+        exclude:
+            - wsgi_app/static/src/
 
 sast:
     stage: test
