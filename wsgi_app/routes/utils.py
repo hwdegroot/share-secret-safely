@@ -32,7 +32,8 @@ def store_secret(secret_value, session=None):
     token = cipher.encrypt(bytes(secret_value, "utf-8"))
 
     # Create a secret object from the string
-    secret = Secret(bytes.decode(token))
+    secret = Secret(bytes.decode(token), ttl=0)
+    logger.info(secret)
 
     # actually store the secret
     session.add(secret)
@@ -58,12 +59,12 @@ def obtain_secret(secret_id, session=None):
         raise SecretNotFoundException("Secret does not exist")
 
     # 403 when already viewed
-    if secret.password_hash is None:
+    if secret.encoded_secret is None:
         raise SecretAlreadyViewedException(403)
 
-    secret_value = cipher.decrypt(secret.password_hash.encode())
+    secret_value = cipher.decrypt(secret.encoded_secret.encode(), ttl=secret.ttl)
     # set the value to None so we know it has been viewed
-    secret.password_hash = None
+    secret.encoded_secret = None
     session.add(secret)
     session.commit()
 
