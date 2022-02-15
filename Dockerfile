@@ -16,6 +16,7 @@ RUN apt-get install -y \
     postgresql-client
 
 # Install alll known dependencies
+RUN pip install --upgrade pip
 RUN pip install -r /tmp/requirements.txt
 
 # remove dependency file
