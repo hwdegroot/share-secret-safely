@@ -3,7 +3,7 @@ FROM python:3.9-slim
 MAINTAINER Rik de Groot <hwdegroot@gmail.com>
 
 # Copy requirements file
-COPY requirements-dev.txt /tmp/requirements.txt
+COPY Pipfile /tmp/Pipfile
 
 # Update the package lists:
 RUN apt-get update
@@ -17,10 +17,12 @@ RUN apt-get install -y \
 
 # Install alll known dependencies
 RUN pip install --upgrade pip
+RUN pip install pipenv
+RUN cd /tmp && pipenv lock -r --dev | tee /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
 
 # remove dependency file
-RUN rm /tmp/requirements.txt
+RUN rm /tmp/Pipfile /tmp/requirements.txt
 
 # Clean up
 RUN apt-get clean autoclean

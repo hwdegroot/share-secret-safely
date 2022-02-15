@@ -16,7 +16,7 @@ stages:
         - pip install -r requirements-dev.txt
 
 # lint using autopep8
-lint:
+lint:python:
     extends: .python
     script:
         - autopep8
@@ -28,6 +28,13 @@ lint:
             --aggressive
             --recursive
             wsgi_app
+
+lint:requirments:
+    extends: .python
+    script:
+      - pip install pipenv
+      - pipenv lock -r > /tmp/requirements.txt
+      - diff requirement.txt /tmp/requirements.txt
 
 # unit test
 test:unit:

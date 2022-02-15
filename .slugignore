@@ -6,7 +6,6 @@ Dockerfile
 Makefile
 package.json
 README.md
-requirements-dev.txt
 run.sh
 tailwind.config.js
 .env.local
