@@ -5,7 +5,6 @@ stages:
 
 # python template
 .python:
-    stage: test
     image: python:3.9-slim
     before_script:
         - apt-get update -qq
@@ -13,11 +12,15 @@ stages:
             build-essential
             libpq-dev
             python3-psycopg2
-        - pip install -r requirements-dev.txt
+        - pip install --upgrade pip
+        - pip install pipenv
+        - pipenv lock -r --dev > /tmp/requirements.txt
+        - pip install -r /tmp/requirements.txt
 
 # lint using autopep8
 lint:python:
     extends: .python
+    stage: lint
     script:
         - autopep8
             --diff
@@ -31,10 +34,9 @@ lint:python:
 
 lint:requirments:
     extends: .python
+    stage: lint
     script:
-      - pip install pipenv
-      - pipenv lock -r > /tmp/requirements.txt
-      - diff requirement.txt /tmp/requirements.txt
+      - diff requirements.txt /tmp/requirements.txt
 
 # unit test
 test:unit:

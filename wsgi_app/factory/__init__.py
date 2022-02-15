@@ -5,6 +5,7 @@ from flask import Flask
 from flask.logging import default_handler
 from flask_sqlalchemy import SQLAlchemy
 
+
 class Factory:
     def get_database_url(self):
         # When a fully wualified db url is defined we use that
