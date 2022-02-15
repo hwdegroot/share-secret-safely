@@ -1,0 +1,11 @@
+.git/
+node_modules/
+.gitlab-ci.yaml
+docker-compose.yaml
+Dockerfile
+Makefile
+package.json
+README.md
+requirements-dev.txt
+run.sh
+tailwind.config.js
