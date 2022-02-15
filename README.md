@@ -20,6 +20,12 @@ When running in production, make sure to use a different `ENCRYPTION_SALT`. You 
 
 More info in the [cryptography docs](https://pypi.org/project/cryptography/)
 
+### Linting the code
+
+When the app is running locally, run
+
+    make autoformat
+
 ## Update database
 
 run
