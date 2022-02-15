@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (copyText) {
                 window.getSelection().selectAllChildren(copyText)
                 // Copy the text inside the text field
-                navigator.clipboard.writeText(copyText.innerText)
+                navigator.clipboard.writeText(copyText.value ? copyText.value : copyText.innerText)
                 document.getElementById("success-message").classList.remove("hidden")
             }
         }
