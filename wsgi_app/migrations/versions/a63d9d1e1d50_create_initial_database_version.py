@@ -1,4 +1,4 @@
-"""empty message
+"""Create inital database version
 
 Revision ID: a63d9d1e1d50
 Revises:
