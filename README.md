@@ -34,9 +34,10 @@ run
 
 ## Migrate
 
-run
+Locally the migrations will run when running the app.
+To run migrations manually, run
 
-    flask db upgrade
+    wsgi_app/migrations/migrate.sh
 
 ## Creating the database
 
