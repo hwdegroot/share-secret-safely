@@ -8,7 +8,7 @@ class Secret(db.Model):
     __tablename__ = 'secrets'
 
     id = db.Column(UUID(as_uuid=True), primary_key=True)
-    password_hash = db.Column(db.String(5000), nullable=True)
+    password_hash = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
