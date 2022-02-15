@@ -5,14 +5,21 @@ from flask import Flask
 from flask.logging import default_handler
 from flask_sqlalchemy import SQLAlchemy
 
-db_user = os.getenv("POSTGRES_USER")
-db_passwd = os.getenv("POSTGRES_PASSWORD")
-db_host = os.getenv("POSTGRES_HOST")
-db_port = os.getenv("POSTGRES_PORT")
-db_database = os.getenv("POSTGRES_DB")
-
-
 class Factory:
+    def get_database_url(self):
+        # When a fully wualified db url is defined we use that
+        # else we build it ourselves
+        if os.getenv("DATABASE_URL") is not None:
+            return os.getenv("DATABASE_URL")
+
+        db_user = os.getenv("POSTGRES_USER")
+        db_passwd = os.getenv("POSTGRES_PASSWORD")
+        db_host = os.getenv("POSTGRES_HOST")
+        db_port = os.getenv("POSTGRES_PORT")
+        db_database = os.getenv("POSTGRES_DB")
+
+        return f"postgresql://{db_user}:{db_passwd}@{db_host}:{db_port}/{db_database}"
+
     def __init__(self, **kwargs):
         self.app = self.create_app(**kwargs)
         self.db = self.get_db()
@@ -31,7 +38,7 @@ class Factory:
             return self.app
 
         self.app = Flask(__name__, **kwargs)
-        self.app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{db_user}:{db_passwd}@{db_host}:{db_port}/{db_database}"
+        self.app.config["SQLALCHEMY_DATABASE_URI"] = self.get_database_url()
         self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv(
             "SQLALCHEMY_TRACK_MODIFICATIONS")
         self.app.config["APP_SECRET_KEY"] = os.getenv("APP_SECRET_KEY")
