@@ -18,8 +18,8 @@ depends_on = None
 
 def upgrade():
     op.alter_column(
-        "secrets",
-        column_name="password_hash",
+        'secrets',
+        column_name='password_hash',
         type=sa.Text,
         existing_type=sa.String(5000),
     )
@@ -27,8 +27,8 @@ def upgrade():
 
 def downgrade():
     op.alter_column(
-        "secrets",
-        column_name="password_hash",
+        'secrets',
+        column_name='password_hash',
         existing_type=sa.Text,
         type=sa.String(5000),
     )
