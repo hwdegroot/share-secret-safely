@@ -6,6 +6,5 @@ Dockerfile
 Makefile
 README.md
 run.sh
-tailwind.config.js
 .env.local
 wsgi_app/test/
