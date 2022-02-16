@@ -34,6 +34,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/api-docs")
+def api_docs():
+    return render_template("api-docs.html")
+
+
 @app.route("/secret/<uuid:secret_id>")
 def secret(secret_id):
     try:

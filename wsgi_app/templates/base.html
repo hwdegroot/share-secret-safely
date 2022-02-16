@@ -31,12 +31,20 @@
             </div>
         </div>
         <div class="flex justify-center mt-4">
-            <a
-                class="text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out"
-                href="/"
-            >
-            Store another secret
-            </a>
+            <div class="flex justify-between w-full max-w-lg">
+                <a
+                    class="text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out"
+                    href="/"
+                >
+                Store another secret
+                </a>
+                <a
+                    href="{{ url_for('api_docs') }}"
+                    class="inline-block text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out"
+                >
+                    api docs
+                </a>
+            </div>
         </div>
     </div>
     <script language="javascript" src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
