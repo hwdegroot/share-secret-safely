@@ -28,9 +28,7 @@ When the app is running locally, run
 
 ## Update database
 
-run
-
-    flask db revision -m "<revision name>" --autogenerate
+    flask db upgrade
 
 ## Migrate
 
@@ -38,6 +36,17 @@ Locally the migrations will run when running the app.
 To run migrations manually, run
 
     wsgi_app/migrations/migrate.sh
+
+### Create new revision
+
+run
+
+    flask db revision -m "<revision name>" --autogenerate
+
+Update the model in `wsgi_app/models` and if it is a new one, add it to `wsgi_app/models/__init__.py`
+Then update the file that has been created (in `wsgi_app/migrations/versions/<hash>_<name>.py`) with the migration. For reference, see https://alembic.sqlalchemy.org/en/latest/index.html
+For the SQLAlchemy docs, look [here](https://docs.sqlalchemy.org/en/14/)
+
 
 ## Creating the database
 
