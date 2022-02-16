@@ -12,3 +12,7 @@ class InvalidSecretIdentifierException(Exception):
 
 class SecretExpiredException(Exception):
     pass
+
+
+class DatabaseConnectionNotConfiguredException(Exception):
+    pass
