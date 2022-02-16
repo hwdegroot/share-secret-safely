@@ -88,8 +88,28 @@ Run the unittest like so
 
     python wsgi_app/run_test.py
 
-## Heroku local
+## Heroku
+
+### local
 
     pipenv install
     pipenv shell
     heroku local web --env=.env.local
+
+### Remote
+
+The following config vars should be set (use `heroku config:se VAR=value -a <app_name>`)
+
+    APP_SECRET_KEY
+    DATABASE_URL
+    ENCRYPTION_SALT
+    FLASK_APP: wsgi_app
+    NODE_MODULES_CACHE: true
+    NPM_CONFIG_PRODUCTION: true
+    POSTGRES_DB
+    POSTGRES_HOST
+    POSTGRES_PASSWORD
+    POSTGRES_PORT
+    POSTGRES_USER
+    SQLALCHEMY_TRACK_MODIFICATIONS: False
+    USE_NPM_INSTALL: true

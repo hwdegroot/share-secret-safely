@@ -4,7 +4,6 @@ node_modules/
 docker-compose.yaml
 Dockerfile
 Makefile
-package.json
 README.md
 run.sh
 tailwind.config.js

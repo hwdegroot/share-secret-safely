@@ -46,6 +46,7 @@ test:unit:
         APP_SECRET_KEY: supersecretkey
         ENCRYPTION_SALT: _y4nTJVIyUJ7fkZYm2OnT5AYHYS_2YAq3gGQOSW80sI=
         SQLALCHEMY_TRACK_MODIFICATIONS: "False"
+        DATABASE_URL: postgres://wedontneedthathere
     script:
         - python wsgi_app/test/run_tests.py
 

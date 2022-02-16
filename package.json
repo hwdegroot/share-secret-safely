@@ -5,10 +5,15 @@
     "scripts": {
         "compile": "npx tailwindcss -i wsgi_app/static/src/main.tailwind -o wsgi_app/static/css/main.css",
         "prewatch": "npm install",
-        "watch": "nodemon --watch wsgi_app/static/src --watch wsgi_app/templates --exec 'npm run compile'"
+        "watch": "nodemon --watch wsgi_app/static/src --watch wsgi_app/templates --exec 'npm run compile'",
+        "build": "npm run compile"
     },
     "author": "Rik de Groot",
     "license": "MIT",
+    "engines": {
+        "node": "17.x",
+        "npm": "8.x"
+    },
     "bugs": {
         "url": "https://gitlab.com/financiallease/secret-sharing/issues"
     },
@@ -16,7 +21,9 @@
         "ext": "js,html,htm,css"
     },
     "dependencies": {
-        "nodemon": "^2.0.15",
         "tailwindcss": "^3.0.22"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.15"
     }
 }
