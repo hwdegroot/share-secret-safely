@@ -20,24 +20,31 @@ from wsgi_app.exceptions import (
 
 API_PREFIX = "/api/v1"
 
+HOUR_IN_SECONDS = 3600
+
 
 @app.route("/api/v1/secret/store", methods=["POST"])
 def api_store():
     """
     Check if the secret is more than just a space
     """
-    data = request.get_json(force=True).get("secret", "")
-    if data.isspace():
+    data = request.get_json(force=True)
+    secret = data.get("secret", "")
+    expires_after = data.get("expires_after_days", None)
+    ttl = HOUR_IN_SECONDS * expires_after if isinstance(expires_after, int) else None
+
+    if secret.isspace():
         return jsonify({
             "error": "Please provide a secret",
         }), 400
 
-    secret_id = store_secret(data)
+    secret_id = store_secret(secret, ttl=ttl)
     api_link = create_secret_link(secret_id, prefix=API_PREFIX)
     link = create_secret_link(secret_id)
     return jsonify({
         "api_link": api_link,
-        "link": link
+        "link": link,
+        "expires_after_days": expires_after
     }), 201
 
 

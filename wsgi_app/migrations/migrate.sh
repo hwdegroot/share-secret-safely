@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 echo "===== Initalize the database ====="
-flask db init
+if ! [[ -d wsgi_app/migrations ]]; then
+    flask db init
+else
+    echo "DB already initialized. Skipping"
+fi
 
 echo "===== Run the migrations ====="
 flask db migrate

@@ -6,24 +6,29 @@
 <h5 class="text-slate-900 dark:text-blue-600 text-xl leading-tight font-medium mb-2">Use the api to share a secret</h5>
 <p class="text-black dark:text-white">
 It is also possible to store and obtain secrets using the api.
-Simply post your secret to the api endpoint
+Simply post your secret to the api endpoint. You can set an expiration
+time in days as well.
 </p>
 <p class="text-black dark:text-white mb-4">Store a new secret</p>
 <code class="w-full">
-<pre class="text-blue-600 dark:text-sky-500 mb-4 whitespace-pre">
+<pre class="text-blue-600 dark:text-sky-500 mb-4 whitespace-pre-line">
 <strong>POST</strong>    /api/v1/secret/store
 
-<em>PAYLOAD</em> secret (string)
+<em>PAYLOAD</em>
+secret (string)
+expires_after_days int: default None
 
 RESPONSES:
 
 <em>201</em> Secret stored
 {
     "link": "/secret/{uuid}",
-    "api_link": "/api/v1/secret/{uuid}"
+    "api_link": "/api/v1/secret/{uuid}",
+    "expires_after_days": int|None
 }
 
-curl -XPOST -d '{"secret": "secret"}' \
+curl -XPOST \
+    -d '{"secret": "secret"}' \
     /api/v1/secret/store
 </pre>
 </code>
@@ -45,7 +50,7 @@ RESPONSES:
 <em>403</em> secret has already been viewed
 <em>403</em> TTL expired
 
-curl /api/v1/secret/19ddf4ed-a144-42ae-8214-45c6f5080bb1
+curl /api/v1/secret/{uuid}
 </pre>
 </code>
 {% endblock %}

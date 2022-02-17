@@ -59,7 +59,17 @@ with app.app_context():
 
 Store a new secret by posting it to the api
 
-    curl -XPOST -H"Content-Type: application/json" -d '{"secret": "secret"}' localhost:8080/api/v1/secret/store
+    curl -XPOST \
+        -H"Content-Type: application/json" \
+        -d '{"secret": "secret"}' \
+        localhost:8080/api/v1/secret/store
+
+Optionally provide the amout of days that the secret can be retrieved (api only)
+
+    curl -XPOST \
+        -H"Content-Type: application/json" \
+        -d '{"secret": "secret", "expires_after_days": 3}' \
+        localhost:8080/api/v1/secret/store
 
 This will return two links
 
