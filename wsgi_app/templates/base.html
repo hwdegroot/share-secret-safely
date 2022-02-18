@@ -7,10 +7,11 @@
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block styles %}{% endblock %}
 </head>
 <body class="dark p-0 m-0">
-    <div class="bg-slate-200 dark:bg-black p-3.5 min-h-screen">
-        <div class="flex justify-center mt-4">
+    <div class="bg-slate-200 dark:bg-black py-3.5 px-0 md:px-3.5 min-h-screen">
+        <div class="flex justify-center m-0 px-2">
             <div class="flex justify-between w-full max-w-lg">
                 <span class="flex align-center justify-center">
                     {% include "partials/gitlab-icon.svg" %}
@@ -24,13 +25,20 @@
                 {% include "partials/darkmode.html" %}
             </div>
         </div>
-        <div class="flex justify-center mt-4">
-            <div class="bg-white dark:bg-slate-900 block p-6 rounded-lg dark:shadow-blue-900 shadow max-w-lg">
+        <div class="flex justify-center my-4 mx-0 md:my-4">
+            <div class="
+                bg-white dark:bg-slate-900
+                block
+                py-6 px-2 md:px-6
+                md:rounded-lg
+                dark:shadow-blue-900
+                shadow max-w-lg
+            ">
             {% block toast %}{% endblock %}
             {% block content %}{% endblock %}
             </div>
         </div>
-        <div class="flex justify-center mt-4">
+        <div class="flex justify-center m-0 px-2">
             <div class="flex justify-between w-full max-w-lg">
                 <a
                     class="text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out"

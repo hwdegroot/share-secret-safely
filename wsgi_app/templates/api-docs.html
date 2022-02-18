@@ -1,56 +1,91 @@
 {% extends 'base.html' %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/monokai.min.css') }}">
+{% endblock %}
 {% block title %}Share a secret safely{% endblock %}}
 
 {% block content %}
-<h5 class="text-slate-900 dark:text-blue-600 text-xl leading-tight font-medium mb-2">Use the api to share a secret</h5>
+<h4 class="text-slate-900 dark:text-blue-600 text-xl leading-tight font-medium mb-2">Use the api to share a secret</h4>
 <p class="text-black dark:text-white">
 It is also possible to store and obtain secrets using the api.
 Simply post your secret to the api endpoint. You can set an expiration
 time in days as well.
 </p>
 <p class="text-black dark:text-white mb-4">Store a new secret</p>
-<code class="w-full">
-<pre class="text-blue-600 dark:text-sky-500 mb-4 whitespace-pre-line">
-<strong>POST</strong>    /api/v1/secret/store
+<pre class="w-full">
+<code class="
+    language-bash
+    text-blue-600
+    dark:text-sky-500
+    rounded-md
+    whitespace-pre-line
+"><strong>POST</strong>    /api/v1/secret/store
 
 <em>PAYLOAD</em>
 secret (string)
 expires_after_days int: default None
 
 RESPONSES:
-
 <em>201</em> Secret stored
-{
-    "link": "/secret/{uuid}",
-    "api_link": "/api/v1/secret/{uuid}",
-    "expires_after_days": int|None
-}
-
-curl -XPOST \
-    -d '{"secret": "secret"}' \
-    /api/v1/secret/store
-</pre>
 </code>
+</pre>
+<pre class="w-full">
+<code class="language-json rounded-md">{
+  "link": "/secret/{id}",
+  "api_link": "/api/v1/secret/{id}",
+  "expires_after_days": int|null
+}
+</code>
+</pre>
+<h5 class="text-slate-900 dark:text-blue-600 text-lg leading-tight font-medium mb-2">Example</h5>
+<pre class="w-full">
+<code class="language-bash text-blue-600 dark:text-sky-500 rounded-md"> curl -XPOST \
+  -d '{"secret": "secret"}' \
+  /api/v1/secret/store
+</code>
+</pre>
 <p class="text-black dark:text-white mb-4">
 When the secret has been stored safely, you can use the regular link to share with someone.
 But if you need to get the secret programmatically, it is also possible to do that over the
 api as well. Whatever suits you best.
 </p>
-<code>
-<pre class="text-blue-600 dark:text-sky-500 mb-4 whitespace-pre-line">
-<strong>GET</strong>    /api/v1/secret/{uuid}
+<pre>
+<code class="
+    language-bash
+    text-blue-600
+    dark:text-sky-500
+    rounded-md
+    whitespace-pre-line
+"><strong>GET</strong>  /api/v1/secret/{id}
 
 RESPONSES:
-<em>200</em>
-{
-    "secret": <secret>
-}
+
 <em>404</em> secret does not exist
 <em>403</em> secret has already been viewed
 <em>403</em> TTL expired
-
-curl /api/v1/secret/{uuid}
+<em>200</em> Success
 </pre>
 </code>
+<h5 class="text-slate-900 dark:text-blue-600 text-lg leading-tight font-medium mb-2">Example</h5>
+<pre>
+<code class="
+    language-bash
+    rounded-md
+    whitespace-pre-line
+">curl /api/v1/secret/{id}</code>
+</pre>
+<pre class="w-full">
+<code class="language-json rounded-md">{
+  "secret": "secret"
+}
+</pre>
+</code>
+{% endblock %}
+
+{% block scripts %}
+<script language="javascript" src="{{ url_for('static', filename='js/highlight.min.js') }}"></script>
+<script language="javascript" src="{{ url_for('static', filename='js/bash.min.js') }}"></script>
+<script language="javascript" src="{{ url_for('static', filename='js/json.min.js') }}"></script>
+<script language="javascript">hljs.highlightAll();</script>
 {% endblock %}
