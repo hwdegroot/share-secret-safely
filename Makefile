@@ -32,3 +32,6 @@ create_docker: build
 	docker build -t registry.gitlab.com/hwdegroot/secret-sharing . && \
 	docker push registry.gitlab.com/hwdegroot/secret-sharing
 
+recreate_requirements-base:
+	docker-compose exec app pipenv lock -r --dev > requirements-base.txt
+

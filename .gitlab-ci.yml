@@ -36,7 +36,7 @@ lint:requirments:
     extends: .python
     stage: lint
     script:
-      - diff requirements.txt /tmp/requirements.txt
+      - diff requirements-base.txt /tmp/requirements.txt
 
 # unit test
 test:unit:
