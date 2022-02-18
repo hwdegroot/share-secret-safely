@@ -24,10 +24,17 @@ time in days as well.
 
 <em>PAYLOAD</em>
 secret (string)
-expires_after_days int: default None
+expires_after_days int: default null
 
 RESPONSES:
 <em>201</em> Secret stored
+</code>
+</pre>
+<h5 class="text-slate-900 dark:text-blue-600 text-lg leading-tight font-medium mb-2">Example</h5>
+<pre class="w-full">
+<code class="language-bash text-blue-600 dark:text-sky-500 rounded-md"> curl -XPOST \
+  -d '{"secret": "secret"}' \
+  /api/v1/secret/store
 </code>
 </pre>
 <pre class="w-full">
@@ -36,13 +43,6 @@ RESPONSES:
   "api_link": "/api/v1/secret/{id}",
   "expires_after_days": int|null
 }
-</code>
-</pre>
-<h5 class="text-slate-900 dark:text-blue-600 text-lg leading-tight font-medium mb-2">Example</h5>
-<pre class="w-full">
-<code class="language-bash text-blue-600 dark:text-sky-500 rounded-md"> curl -XPOST \
-  -d '{"secret": "secret"}' \
-  /api/v1/secret/store
 </code>
 </pre>
 <p class="text-black dark:text-white mb-4">
