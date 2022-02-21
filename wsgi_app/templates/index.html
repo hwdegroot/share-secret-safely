@@ -29,11 +29,17 @@
 
 {% block content %}
 <form method="post" action="/store">
-    <h4 class="text-slate-900 dark:text-blue-600 text-xl leading-tight font-medium mb-2">Paste a secret to share</h4>
-    <p class="text-black dark:text-white">
+    <h4 class="
+        text-blue-600
+        dark:text-[#67eba2]
+        text-xl
+        leading-tight
+        font-medium mb-2
+    ">Paste a secret to share</h4>
+    <p class="text-black dark:text-[#e8e6e3]">
     Use this to share a secret with someone. You can put the secret in the textarea.
     The secret will be encrypted using <a
-        class="text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out"
+        class="text-blue-600 dark:text-[#67eba2] dark:hover:text-[#128847] transition duration-300 ease-in-out"
         href="https://cryptography.io/en/latest/">Fernet symmetric encryption</a>.
     You will get a link to view the password only once. Do not open the link yourself before
     sharing, because then the person the password is shared with cannot view again.
@@ -41,7 +47,7 @@
     <br />
     <label
         for="secret"
-        class="text-black dark:text-blue-700"
+        class="text-blue-700 dark:text-[#128847]"
     >
         Insert secret (max 5000)
     </label>
@@ -63,15 +69,16 @@
                py-1.5
                text-base
                font-normal
-               text-gray-700 dark:text-white
-               bg-white dark:bg-slate-700 bg-clip-padding
-               border border-solid border-gray-300 dark:border-blue-600
+               text-gray-700 dark:text-[#e8e6e3]
+               bg-white dark:bg-[#282e37] bg-clip-padding
+               border border-solid border-gray-300
+               dark:focus:border-[#67eba2] dark:border-[#128847]
                rounded
                resize-none overflow-auto
                transition ease-in-out
                focus:outline-0
                focus:text-gray-700 focus:bg-slate-100 focus:border-blue-600 focus:border-x-2 focus:border-y-2 focus:outline-none
-               dark:focus:placeholder:text-slate-500 dark:focus:bg-slate-300 dark:focus:text-gray-700
+               dark:focus:placeholder:text-slate-500
         "
     ></textarea>
     <button
@@ -83,13 +90,17 @@
             px-6
             py-2.5
             bg-blue-600
+            dark:bg-[#128847]
             text-white font-medium text-xs leading-tight uppercase
             rounded
             shadow-md
             hover:bg-blue-700 hover:shadow-lg
             focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
             active:bg-blue-800 active:shadow-lg
-            transition duration-150 ease-in-out
+            dark:hover:bg-[#67eba2]
+            dark:focus:bg-[#67eba2]
+            dark:active:bg-[#67eba2]
+            transition duration-300 ease-in-out
         "
     >
         Lock my secret safe
