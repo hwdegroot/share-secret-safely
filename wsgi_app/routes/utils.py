@@ -43,7 +43,7 @@ def store_secret(secret_value, ttl=None, session=None):
     return str(secret.id)
 
 
-def obtain_secret(secret_id, session=None):
+def obtain_secret(secret_id, session=None, verify=False):
     """
     Fetch the secret from the database
     """
@@ -66,17 +66,21 @@ def obtain_secret(secret_id, session=None):
     try:
         secret_value = cipher.decrypt(secret.encoded_secret.encode(), ttl=secret.ttl)
     except InvalidToken:
-        secret.encoded_secret = None
-        session.add(secret)
-        session.commit()
+        if not verify:
+            secret.encoded_secret = None
+            session.add(secret)
+            session.commit()
         raise SecretExpiredException(403)
 
     # set the value to None so we know it has been viewed
-    secret.encoded_secret = None
-    session.add(secret)
-    session.commit()
+    if not verify:
+        secret.encoded_secret = None
+        session.add(secret)
+        session.commit()
 
-    return secret_value.decode()
+        return secret_value.decode()
+
+    return None
 
 
 def is_valid_guid(value):

@@ -4,10 +4,18 @@ import logging
 from flask import Flask
 from flask.logging import default_handler
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
 from wsgi_app.exceptions import DatabaseConnectionNotConfiguredException
 
 
 class Factory:
+    '''
+    Factory to create the app instance and initialize it with DB
+    '''
+    jwt = None
+    app = None
+    db = None
+
     def get_database_url(self):
         # When a fully wualified db url is defined we use that
         # else we build it ourselves
@@ -54,6 +62,9 @@ class Factory:
         self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv(
             "SQLALCHEMY_TRACK_MODIFICATIONS")
         self.app.config["APP_SECRET_KEY"] = os.getenv("APP_SECRET_KEY")
+        self.app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+        self.app.config["JWT_TOKEN_LOCATION"] = ["headers", "query_string"]
+        self.jwt = JWTManager(self.app)
 
         self.db = self.get_db(self.app)
 

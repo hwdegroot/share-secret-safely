@@ -3,10 +3,13 @@ from wsgi_app.factory import Factory
 from cryptography.fernet import Fernet
 
 
+# Setup the Flask-JWT-Extended extension
+
 # require environment variables
 envvar_required = [
     "APP_SECRET_KEY",
     "ENCRYPTION_SALT",
+    "JWT_SECRET_KEY",
 ]
 
 for envvar in envvar_required:
