@@ -1,13 +1,13 @@
 TAG := registry.gitlab.com/hwdegroot/secret-sharing:python-3.9
 
-run: build
+run:
 	docker-compose up
 
 build: clean
 	docker-compose build
 
 clean: stop
-	git clean -ffdx
+	sudo git clean -ffdx
 
 stop:
 	docker-compose down

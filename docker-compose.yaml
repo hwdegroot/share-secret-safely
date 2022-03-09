@@ -20,11 +20,12 @@ services:
             retries: 10
     npm:
         image: node
-        command: ["npm", "run", "watch"]
+        command: ["/var/current/npm-run.sh", "--serve"]
         working_dir: /var/current
+        #user: node
         volumes:
             - $PWD:/var/current
-            - nodemodules:/var/current/node_modules
+            - nodemodules:/home/node/node_modules
     app:
         image: registry.gitlab.com/hwdegroot/secret-sharing:python-3.9
         build: .
@@ -39,14 +40,15 @@ services:
         environment:
             <<: *environment
             POSTGRES_HOST: postgres
-            SQLALCHEMY_TRACK_MODIFICATIONS: False
+            SQLALCHEMY_TRACK_MODIFICATIONS: "False"
             FLASK_APP: wsgi_app
             FLASK_ENV: development
-            FLASK_DEBUG: True
+            FLASK_DEBUG: "True"
             FLASK_RUN_HOST: 0.0.0.0
             FLASK_RUN_PORT: 8080
             ENCRYPTION_SALT: 6tBFpnZMNH-v4ZXPr5dhT-u65XUJzmH8XmzrhZ89v64=
             APP_SECRET_KEY: supersecretkey
+            JWT_SECRET_KEY: supersecretkey
 volumes:
     dbfiles: {}
     nodemodules: {}

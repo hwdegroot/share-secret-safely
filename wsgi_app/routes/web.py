@@ -6,9 +6,15 @@ from flask import (
     request,
     send_from_directory,
     url_for,
+    jsonify,
 )
 from werkzeug.exceptions import Forbidden, NotFound
 import os
+from flask_jwt_extended import (
+    create_access_token,
+    get_jwt_identity,
+    jwt_required
+)
 from wsgi_app import app
 from uuid import UUID
 from .utils import (
@@ -42,7 +48,7 @@ def api_docs():
 @app.route("/secret/<uuid:secret_id>")
 def secret(secret_id):
     try:
-        secret = obtain_secret(secret_id)
+        secret = obtain_secret(secret_id, verify=True)
     except InvalidSecretIdentifierException:
         abort(404, f"Id {secret_id} is not a valid guid")
     except SecretNotFoundException:
@@ -52,7 +58,16 @@ def secret(secret_id):
     except SecretExpiredException:
         abort(403, f"Secret{secret_id} viewing has expired")
 
-    return render_template("show_secret.html", secret=secret)
+    access_token = create_access_token(identity=secret_id)
+    # if we get here, the secret can be obtained
+    return render_template("show_secret.html", access_token=access_token, secret_id=secret_id)
+
+
+@app.route("/api/secret/<uuid:secret_id>")
+@jwt_required()
+def get_secret_async(secret_id):
+    secret = obtain_secret(secret_id, verify=False)
+    return jsonify({"secret": secret}), 200
 
 
 @app.route("/store", methods=["POST"])

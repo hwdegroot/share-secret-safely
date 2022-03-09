@@ -43,6 +43,7 @@ test:unit:
     extends: .python
     stage: test
     variables:
+        JWT_SECRET_KEY: jwtsecret
         APP_SECRET_KEY: supersecretkey
         ENCRYPTION_SALT: _y4nTJVIyUJ7fkZYm2OnT5AYHYS_2YAq3gGQOSW80sI=
         SQLALCHEMY_TRACK_MODIFICATIONS: "False"
@@ -54,6 +55,7 @@ build:css:
     image: node
     stage: build
     script:
+        - npm install
         - npx tailwindcss -i wsgi_app/static/src/main.tailwind -o wsgi_app/static/css/main.css
 
     artifacts:
