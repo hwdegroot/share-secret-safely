@@ -22,7 +22,6 @@ services:
         image: node
         command: ["/var/current/npm-run.sh", "--serve"]
         working_dir: /var/current
-        #user: node
         volumes:
             - $PWD:/var/current
             - nodemodules:/home/node/node_modules
@@ -35,8 +34,8 @@ services:
         volumes:
             - $PWD:/var/current
         depends_on:
-            postgres:
-                condition: service_healthy
+            - postgres
+                #   condition: service_healthy
         environment:
             <<: *environment
             POSTGRES_HOST: postgres

@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/fonts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
     {% block styles %}{% endblock %}
 </head>
 <body class="bg-slate-200 dark:bg-[#282e37] p-0 m-0">
@@ -40,9 +41,10 @@
                 block
                 py-6 px-2 md:px-6
                 md:rounded-lg
-                dark:shadow-[#128847]
+                dark:shadow-[#282e37]
                 shadow max-w-lg
             ">
+            {% include "partials/toast.html" %}
             {% block toast %}{% endblock %}
             {% block content %}{% endblock %}
             </div>

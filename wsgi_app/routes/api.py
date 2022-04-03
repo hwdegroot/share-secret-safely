@@ -20,7 +20,7 @@ from wsgi_app.exceptions import (
 
 API_PREFIX = "/api/v1"
 
-HOUR_IN_SECONDS = 3600
+DAY_IN_SECONDS = 3600 * 24
 
 
 @app.route("/api/v1/secret/store", methods=["POST"])
@@ -31,7 +31,7 @@ def api_store():
     data = request.get_json(force=True)
     secret = data.get("secret", "")
     expires_after = data.get("expires_after_days", None)
-    ttl = HOUR_IN_SECONDS * expires_after if isinstance(expires_after, int) else None
+    ttl = DAY_IN_SECONDS * expires_after if isinstance(expires_after, int) else None
 
     if secret.isspace():
         return jsonify({

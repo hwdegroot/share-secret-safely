@@ -10,6 +10,7 @@ from flask import (
 )
 from werkzeug.exceptions import Forbidden, NotFound
 import os
+from datetime import datetime, timedelta
 from flask_jwt_extended import (
     create_access_token,
     get_jwt_identity,
@@ -28,6 +29,9 @@ from wsgi_app.exceptions import (
     SecretAlreadyViewedException,
     SecretExpiredException
 )
+
+
+HOUR_IN_SECONDS = 3600
 
 
 @app.route('/robots.txt')
@@ -79,9 +83,17 @@ def save_secret():
         flash("Please provide a secret")
         return redirect(url_for("index"), 400)
 
-    secret_id = store_secret(request.form.get("secret", ""))
+    # calculate the expiration time
+    expiration_ttl_in_hours = request.form.get("expiration_ttl", "")
+    ttl = int(expiration_ttl_in_hours) * \
+        HOUR_IN_SECONDS if expiration_ttl_in_hours.isnumeric() else None
+    secret_id = store_secret(request.form.get("secret", ""), ttl=ttl)
 
-    # return hash
+    # When a ttl is set, add some flash data with info when the password expires
+    if ttl is not None:
+        end_ttl = datetime.now() + timedelta(seconds=ttl)
+        flash(f"Secret will be available until <strong>{end_ttl.strftime('%c')}</strong>")
+
     return redirect(url_for("stored_secret", id=secret_id))
 
 
