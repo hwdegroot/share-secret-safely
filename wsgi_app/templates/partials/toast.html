@@ -1,0 +1,26 @@
+{% block toast %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p
+                    id="error-message"
+                    class="
+                        bg-red-100
+                        rounded-lg
+                        py-5
+                        px-6
+                        mb-4
+                        text-base
+                        text-red-700
+                        mb-3
+                        transition duration-150 ease-in-out
+                    "
+                        role="alert"
+                    >
+                   {{ message|safe }}
+                </p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
