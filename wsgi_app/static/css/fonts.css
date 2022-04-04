@@ -1,3 +1,25 @@
 .font-ubuntu-mono {
     font-family: 'Ubuntu Mono', monospace;
 }
+
+.dark ::selection {
+    background-color: #67eba2;
+    color: #282e37;
+}
+
+::selection {
+    background-color: rgb(37, 99, 235);
+    color: white;
+}
+
+a::selection {
+    color: rgb(37, 99, 235);
+    background-color: rgba(37, 99, 235, 0.4);
+    font-weight: bold;
+}
+
+.dark a::selection {
+    color: #67eba2;
+    background-color: rgb(40, 46, 55);
+    font-weight: bold;
+}
