@@ -98,6 +98,34 @@ Run the unittest like so
 
     python wsgi_app/run_test.py
 
+## Sentry
+
+Set your `SENTRY_DSN` environment to connect to sentry
+Use the following environment vasr to configure
+
+* `SENTRY_ENVIRONMENT`
+* `APP_VERSION`
+* `SENTRY_SAMPLE_RATE`
+
+```python
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    integrations=[
+        FlaskIntegration(),
+        HttpxIntegration(),
+        SqlalchemyIntegration(),
+    ],
+    environment=os.getenv("SENTRY_ENVIRONMENT", "production"),
+    max_breadcrumbs=50,
+    debug=os.getenv("SENTRY_ENVIRONMENT") != "production",
+    release=os.getenv("APP_VERSION", "dev"),
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=os.getenv("SENTRY_SAMPLE_RATE", 0.5)
+)
+```
+
 ## Heroku
 
 ### local
