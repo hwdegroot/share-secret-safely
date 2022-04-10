@@ -3,6 +3,10 @@ TAG := registry.gitlab.com/hwdegroot/secret-sharing:python-3.9
 run:
 	docker-compose up
 
+
+production:
+	FALSK_ENV=production docker-compose up
+
 build: clean
 	docker-compose build
 
