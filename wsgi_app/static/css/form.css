@@ -12,3 +12,7 @@
     line-height: 2rem;
     font-size: 1.2rem;
 }
+
+textarea#secret:not(.reveal) {
+    filter: blur(0.2rem);
+}
