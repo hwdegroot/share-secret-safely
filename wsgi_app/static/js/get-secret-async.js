@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         axios.get(`/api/secret/${secretId}?jwt=${accessToken}`)
             .then(function (result) {
-                secretArea.innerText = result.data.secret
+                secretArea.innerHTML = result.data.secret
                 button.removeAttribute("disabled")
                 revealButton.removeAttribute("disabled")
                 classList.forEach(function(cls) {
