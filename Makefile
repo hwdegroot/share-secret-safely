@@ -3,6 +3,10 @@ TAG := registry.gitlab.com/hwdegroot/secret-sharing:python-3.9
 run:
 	docker-compose up
 
+
+production:
+	FALSK_ENV=production docker-compose up
+
 build: clean
 	docker-compose build
 
@@ -22,6 +26,16 @@ autoformat:
 		--recursive \
 		wsgi_app
 
+lint:
+	docker-compose exec autopep8 \
+		--diff \
+		--exit-code \
+		--ignore e402 \
+		--max-line-length 100 \
+		--aggressive \
+		--aggressive \
+		--recursive kvk_api | \
+			delta --paging never --line-numbers
 run_test:
 	docker-compose exec app python wsgi_app/test/run_tests.py
 
