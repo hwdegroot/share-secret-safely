@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let revealButton = document.getElementById("reveal-secret");
         const classList = Array.from(button.classList)
         if (revealButton) {
-            debugger
             secretArea.classList.remove("reveal");
         }
         classList.filter(function (cls) {
