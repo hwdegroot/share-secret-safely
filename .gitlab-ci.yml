@@ -2,6 +2,7 @@ stages:
     - lint
     - test
     - build
+    - deploy
 
 # python template
 .python:
@@ -14,7 +15,7 @@ stages:
             python3-psycopg2
         - pip install --upgrade pip
         - pip install pipenv
-        - pipenv lock -r --dev > /tmp/requirements.txt
+        - pipenv requirements --dev > /tmp/requirements.txt
         - pip install -r /tmp/requirements.txt
 
 # lint using autopep8
@@ -32,7 +33,7 @@ lint:python:
             --recursive
             wsgi_app
 
-lint:requirments:
+lint:requirements:
     extends: .python
     stage: lint
     script:
@@ -42,6 +43,7 @@ lint:requirments:
 test:unit:
     extends: .python
     stage: test
+    coverage: /TOTAL\s*\d+\s*\d+\s*([\d\.]+)%/
     variables:
         JWT_SECRET_KEY: jwtsecret
         APP_SECRET_KEY: supersecretkey
@@ -49,7 +51,34 @@ test:unit:
         SQLALCHEMY_TRACK_MODIFICATIONS: "False"
         DATABASE_URL: postgres://wedontneedthathere
     script:
-        - python wsgi_app/test/run_tests.py
+        - nosetests
+          --with-coverage
+          --cover-package=wsgi_app/
+          --cover-html
+          --cover-html-dir=coverage
+          --cover-erase
+          --cover-xml
+          --cover-xml-file=junit.xml
+    artifacts:
+        reports:
+            junit:
+                junit.xml
+        paths:
+            - coverage/
+            - .coverage
+
+pages:
+    stage: deploy
+    image: alpine
+    script:
+        - mv coverage public
+    dependencies:
+        - test:unit
+    artifacts:
+        paths:
+            - public/
+    only:
+        - main
 
 build:css:
     image: node

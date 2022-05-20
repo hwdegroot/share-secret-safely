@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let revealButton = document.getElementById("reveal-secret");
         const classList = Array.from(button.classList)
         if (revealButton) {
-            debugger
             secretArea.classList.remove("reveal");
         }
         classList.filter(function (cls) {
@@ -20,15 +19,24 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(function (result) {
                 secretArea.innerHTML = result.data.secret
                 button.removeAttribute("disabled")
-                revealButton.removeAttribute("disabled")
                 classList.forEach(function(cls) {
                     button.classList.add(cls)
                 })
-                revealButton.classList.remove("opacity-50", "cursor-not-allowed")
-                revealButton.addEventListener("click", function() {
-                    secretArea.classList.add("reveal");
-                    revealButton.remove();
-                });
+                if (revealButton) {
+                    revealButton.removeAttribute("disabled")
+                    revealButton.classList.remove("opacity-50", "cursor-not-allowed")
+                    revealButton.addEventListener("click", function() {
+                        if (secretArea.classList.contains("reveal")) {
+                            secretArea.classList.remove("reveal");
+                            revealButton.innerText = "reveal";
+                            revealButton.classList.remove("hide-secret")
+                        } else {
+                            secretArea.classList.add("reveal");
+                            revealButton.innerText = "unreveal";
+                            revealButton.classList.remove("show-secret")
+                        }
+                    });
+                }
                 button.classList.remove("opacity-50", "cursor-not-allowed")
             })
             .catch(function () {

@@ -4,6 +4,7 @@ MAINTAINER Rik de Groot <hwdegroot@gmail.com>
 
 # Copy requirements file
 COPY Pipfile /tmp/Pipfile
+COPY Pipfile.lock /tmp/Pipfile.lock
 
 RUN apk add --update --no-cache --virtual .build-deps curl jq
 RUN apk add bash
@@ -29,15 +30,13 @@ RUN apk add --update \
 # Install alll known dependencies
 RUN pip install --upgrade pip psycopg2-binary
 RUN pip install pipenv
-RUN cd /tmp && pipenv lock -r --dev | tee /tmp/requirements.txt
+RUN cd /tmp && pipenv requirements --dev | tee /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
 
 # remove dependency file
 RUN apk del .build-deps
-RUN rm /tmp/Pipfile /tmp/requirements.txt
+RUN rm /tmp/Pipfile{,.lock} /tmp/requirements.txt
 
-# Clean up
-RUN rm -f /tmp/{Pipfile,requirements.txt}
 
 WORKDIR /var/current
 

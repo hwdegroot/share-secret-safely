@@ -40,7 +40,10 @@ RESPONSES:
     text-lg
     font-ubuntu-mono
 ">curl -XPOST \
-  -d '{"secret": "secret"}' \
+  -d '{
+    "secret": "secret",
+    "expires_after_days": 3
+  }' \
   /api/v1/secret/store
 </code>
 </pre>

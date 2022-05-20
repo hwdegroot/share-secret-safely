@@ -5,3 +5,7 @@
 __pycache__/
 node_modules/
 wsgi_app/static/css/main.css
+coverage/
+public/
+.coverage
+junit.xml
