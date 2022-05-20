@@ -15,7 +15,7 @@ stages:
             python3-psycopg2
         - pip install --upgrade pip
         - pip install pipenv
-        - pipenv lock -r --dev > /tmp/requirements.txt
+        - pipenv requirements --dev > /tmp/requirements.txt
         - pip install -r /tmp/requirements.txt
 
 # lint using autopep8
@@ -33,7 +33,7 @@ lint:python:
             --recursive
             wsgi_app
 
-lint:requirments:
+lint:requirements:
     extends: .python
     stage: lint
     script:
