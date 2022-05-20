@@ -9,3 +9,6 @@ run.sh
 .env.local
 wsgi_app/test/
 requirements-base.txt
+coverage/
+.coverage
+junit.xml
