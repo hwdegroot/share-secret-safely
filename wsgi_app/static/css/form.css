@@ -13,6 +13,54 @@
     font-size: 1.2rem;
 }
 
-textarea#secret:not(.reveal) {
-    filter: blur(0.2rem);
+textarea::-webkit-scrollbar {
+    width: 4px;
+    border-radius: 2px
 }
+
+textarea::-webkit-scrollbar-track {
+    width: 5px;
+    padding: 1px;
+    background: #f1f1f1;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border-radius: 2px
+}
+
+body.dark textarea::-webkit-scrollbar-track {
+    background: rgb(61, 67, 76);
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    cursor: grab;
+}
+
+body.dark textarea#secret:not(.reveal) {
+    color: transparent;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+body:not(.dark) textarea#secret:not(.reveal) {
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+body:not(.dark) textarea#secret:not(.reveal) + div.curtain svg path {
+    fill: rgb(0, 0, 0);
+}
+textarea#secret.reveal + div.curtain {
+    display: none;
+}
+
+body.dark textarea#secret:not(.reveal)::selection {
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
