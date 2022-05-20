@@ -98,10 +98,14 @@ Run the unittest like so
 
     python wsgi_app/run_test.py
 
+### Coverage
+
+THe latest coverage reports are available on [gitlab pages](https://hwdegroot.gitlab.io/secret-sharing)
+
 ## Sentry
 
 Set your `SENTRY_DSN` environment to connect to sentry
-Use the following environment vasr to configure
+Use the following environment vars to configure
 
 * `SENTRY_ENVIRONMENT`
 * `APP_VERSION`
