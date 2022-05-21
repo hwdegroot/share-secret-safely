@@ -37,6 +37,7 @@ toml = "0.10.2"
 nose = "*"
 coverage = "*"
 junitxml = "*"
+requests = "*"
 
 [requires]
 python_version = "3.9"

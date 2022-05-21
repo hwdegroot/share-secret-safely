@@ -35,8 +35,7 @@ RUN pip install -r /tmp/requirements.txt
 
 # remove dependency file
 RUN apk del .build-deps
-RUN rm /tmp/Pipfile{,.lock} /tmp/requirements.txt
-
+RUN rm -rf /tmp/Pipfile /tmp/Pipfile.lock /tmp/requirements.txt
 
 WORKDIR /var/current
 

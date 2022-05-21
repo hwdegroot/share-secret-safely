@@ -23,7 +23,7 @@ from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from cryptography.fernet import Fernet
 
 
-class TestPasswordEncoding(unittest.TestCase):
+class PasswordEncodingTest(unittest.TestCase):
     session = None
 
     def setUp(self):
