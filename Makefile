@@ -36,8 +36,15 @@ lint:
 		--aggressive \
 		--recursive kvk_api | \
 			delta --paging never --line-numbers
-run_test:
-	docker-compose exec app python wsgi_app/test/run_tests.py
+run-test:
+	docker-compose exec app nosetests test/**/*Test.py \
+		--with-coverage \
+		--cover-package=wsgi_app/ \
+		--cover-html \
+		--cover-html-dir=coverage \
+		--cover-erase \
+		--cover-xml \
+		--cover-xml-file=junit.xml
 
 wipe:
 	docker-compose down --rmi all --volumes

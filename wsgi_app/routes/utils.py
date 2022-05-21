@@ -17,6 +17,9 @@ from wsgi_app.exceptions import (
 
 
 def create_secret_link(secret_id, **kwargs):
+    """
+    Create secret link for api and non api usage
+    """
     prefix = kwargs["prefix"] if "prefix" in kwargs and kwargs["prefix"] else ""
     return "{}{}{}".format(
         request.host_url.rstrip("/"),
@@ -25,11 +28,10 @@ def create_secret_link(secret_id, **kwargs):
     )
 
 
-def store_secret(secret_value, ttl=None, session=None):
-    # set the session when not set, so we can inject in testing
-    if session is None:
-        session = db.session
-
+def store_secret(secret_value, ttl=None):
+    """
+    Dump secret in the database
+    """
     # if empty return back
     token = cipher.encrypt(bytes(secret_value, "utf-8"))
 
@@ -37,24 +39,20 @@ def store_secret(secret_value, ttl=None, session=None):
     secret = Secret(bytes.decode(token), ttl=ttl)
 
     # actually store the secret
-    session.add(secret)
-    session.commit()
+    db.session.add(secret)
+    db.session.commit()
 
     return str(secret.id)
 
 
-def obtain_secret(secret_id, session=None, verify=False):
+def obtain_secret(secret_id, verify=False):
     """
     Fetch the secret from the database
     """
-    # set the session when not set, so we can inject in testing
-    if session is None:
-        session = db.session
-
     if not is_valid_guid(str(secret_id)):
         raise InvalidSecretIdentifierException(f"{secret_id} is not a valid guid")
 
-    secret = session.query(Secret).filter(Secret.id == str(secret_id)).first()
+    secret = db.session.query(Secret).filter(Secret.id == str(secret_id)).first()
     # Secret not available
     if secret is None:
         raise SecretNotFoundException("Secret does not exist")
@@ -68,15 +66,15 @@ def obtain_secret(secret_id, session=None, verify=False):
     except InvalidToken:
         if not verify:
             secret.encoded_secret = None
-            session.add(secret)
-            session.commit()
+            db.session.add(secret)
+            db.session.commit()
         raise SecretExpiredException(403)
 
     # set the value to None so we know it has been viewed
     if not verify:
         secret.encoded_secret = None
-        session.add(secret)
-        session.commit()
+        db.session.add(secret)
+        db.session.commit()
 
         return secret_value.decode()
 
@@ -84,6 +82,9 @@ def obtain_secret(secret_id, session=None, verify=False):
 
 
 def is_valid_guid(value):
+    """
+    Check that string is a valid guid
+    """
     # Regex to check valid
     # GUID (Globally Unique Identifier)
     regex = r"^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$"

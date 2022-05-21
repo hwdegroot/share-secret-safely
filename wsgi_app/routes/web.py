@@ -79,7 +79,7 @@ def save_secret():
     """
     Store secret in the database
     """
-    if request.form.get("secret", "").isspace():
+    if request.form.get("secret", "").strip() == "":
         flash("Please provide a secret")
         return redirect(url_for("index"), 400)
 
@@ -126,4 +126,4 @@ def not_found(e):
 
 @app.errorhandler(Forbidden)
 def forbidden(e):
-    return render_template('403.html'), 404
+    return render_template('403.html'), 403

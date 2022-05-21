@@ -1,11 +1,9 @@
 import os
 import sys
-# prepend the project dir int the path
-sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
-
+import time
 import unittest
 from uuid import uuid4
-from wsgi_app import cipher
+from wsgi_app import cipher, db
 from wsgi_app.models import Secret
 from wsgi_app.routes.utils import (
     create_secret_link,
@@ -23,15 +21,12 @@ from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from cryptography.fernet import Fernet
 
 
-class TestPasswordEncoding(unittest.TestCase):
-    session = None
+class PasswordEncodingTest(unittest.TestCase):
 
     def setUp(self):
-        self.session = UnifiedAlchemyMagicMock()
+        db.session = UnifiedAlchemyMagicMock()
         os.environ["ENCRYPTION_SALT"] = Fernet.generate_key().decode()
 
-    def tearDown(self):
-        self.session = None
 
     def test_environment_variables_are_set(self):
         envvar_required = [
@@ -42,9 +37,11 @@ class TestPasswordEncoding(unittest.TestCase):
         for envvar in envvar_required:
             self.assertIn(envvar, os.environ, f"environment {envvar} not set")
 
+
     def test_encrypting_secret_should_return_secret_id(self):
-        secret_id = store_secret("secret", session=self.session)
+        secret_id = store_secret("secret")
         self.assertTrue(is_valid_guid(secret_id))
+
 
     def test_decrypting_hashed_secret_should_return_secret(self):
         SECRET = "secret_3 30"
@@ -52,24 +49,42 @@ class TestPasswordEncoding(unittest.TestCase):
         # Create a secret object from the string
         secret = Secret(bytes.decode(token))
         # actually store the secret
-        self.session.add(secret)
-        secret_value = obtain_secret(secret.id, session=self.session)
+        db.session.add(secret)
+        secret_value = obtain_secret(secret.id)
 
         self.assertEqual(SECRET, secret_value)
 
-    def test_decrypting_hashed_secret_ttl_expired_should_throw_SecretExpiredException(self):
-        secret_id = store_secret("secret", ttl=-10, session=self.session)
 
-        self.assertRaises(SecretExpiredException, obtain_secret, secret_id, self.session)
+    def test_retrieving_secret_wipes_value_in_db(self):
+        SECRET = "secret_3 30"
+        token = cipher.encrypt(bytes(SECRET, "utf-8"))
+        # Create a secret object from the string
+        secret = Secret(bytes.decode(token))
+        # actually store the secret
+        db.session.add(secret)
+        secret_value = obtain_secret(secret.id)
+
+        self.assertEqual(SECRET, secret_value)
+        wipedSecret = db.session.query(Secret).filter(Secret.id == str(secret.id)).first()
+        self.assertIsNone(wipedSecret.encoded_secret)
+
+
+    def test_decrypting_hashed_secret_ttl_expired_should_throw_SecretExpiredException(self):
+        secret_id = store_secret("secret", ttl=0)
+        time.sleep(1)
+
+        self.assertRaises(SecretExpiredException, obtain_secret, secret_id)
+
 
     def test_decrypting_hashed_secret_second_time_should_throw_SecretAlreadyViewedException(self):
-        secret_id = store_secret("secret", session=self.session)
-        obtain_secret(secret_id, session=self.session)
+        secret_id = store_secret("secret")
+        obtain_secret(secret_id)
 
-        self.assertRaises(SecretAlreadyViewedException, obtain_secret, secret_id, self.session)
+        self.assertRaises(SecretAlreadyViewedException, obtain_secret, secret_id)
 
     def test_decrypting_not_existing_secret_should_throw_SecretNotFoundEception(self):
-        self.assertRaises(SecretNotFoundException, obtain_secret, str(uuid4()), self.session)
+        self.assertRaises(SecretNotFoundException, obtain_secret, str(uuid4()))
+
 
     def test_decrypting_invalid_secret_guid_should_throw_InvalidSecretIdentifierException(self):
-        self.assertRaises(InvalidSecretIdentifierException, obtain_secret, "abcdfg", self.session)
+        self.assertRaises(InvalidSecretIdentifierException, obtain_secret, "abcdfg")

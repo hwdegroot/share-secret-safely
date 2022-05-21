@@ -33,7 +33,7 @@ def api_store():
     expires_after = data.get("expires_after_days", None)
     ttl = DAY_IN_SECONDS * expires_after if isinstance(expires_after, int) else None
 
-    if secret.isspace():
+    if secret is None or secret.strip() == "":
         return jsonify({
             "error": "Please provide a secret",
         }), 400
@@ -42,9 +42,10 @@ def api_store():
     api_link = create_secret_link(secret_id, prefix=API_PREFIX)
     link = create_secret_link(secret_id)
     return jsonify({
+        "id": secret_id,
         "api_link": api_link,
         "link": link,
-        "expires_after_days": expires_after
+        "expires_after_days": expires_after,
     }), 201
 
 
