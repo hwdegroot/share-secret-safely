@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "strict": false,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "alwaysStrict": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        },
+        "allowJs": true
+    },
+    "rollup": {
+        "compilerOptions": {
+            "target": "commonjs",
+            "module": "commonjs"
+        }
+    }
+}
