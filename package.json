@@ -1,13 +1,14 @@
 {
     "name": "secret-sharing",
-    "version": "1.0.0",
+    "version": "1.2.1",
     "description": "Share your secrets, safely",
     "browser": "wsgi_app/static/dist/js/utility.js",
     "scripts": {
         "watch": "nodemon --watch src --watch wsgi_app/templates --exec 'npm run build'",
         "build:css": "tailwindcss -i src/main.tailwind -o wsgi_app/static/dist/css/main.css",
         "build:js": "rollup -c",
-        "build": "npm run build:css && npm run build:js"
+        "build": "npm run build:css && npm run build:js",
+        "heroku-postbuild": "npm run buiild"
     },
     "author": "Rik de Groot",
     "license": "MIT",

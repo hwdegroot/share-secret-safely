@@ -100,3 +100,8 @@ class ApiTest(TestCase):
 
         response = self.client.get(f"/api/v1/secret/{result_json['id']}")
         self.assertEquals(HTTPStatus.FORBIDDEN, response.status_code)
+
+    def test_get_app_version(self):
+        response = self.client.get("/api/version")
+        self.assertEquals(HTTPStatus.OK, response.status_code)
+
