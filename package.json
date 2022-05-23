@@ -1,40 +1,40 @@
 {
-    "name": "secret-sharing",
-    "version": "1.2.1",
-    "description": "Share your secrets, safely",
-    "browser": "wsgi_app/static/dist/js/utility.js",
-    "scripts": {
-        "watch": "nodemon --watch src --watch wsgi_app/templates --exec 'npm run build'",
-        "build:css": "tailwindcss -i src/main.tailwind -o wsgi_app/static/dist/css/main.css",
-        "build:js": "rollup -c",
-        "build": "npm run build:css && npm run build:js",
-        "heroku-postbuild": "npm run buiild"
-    },
-    "author": "Rik de Groot",
-    "license": "MIT",
-    "engines": {
-        "node": "18.x",
-        "npm": "8.x"
-    },
-    "bugs": {
-        "url": "https://gitlab.com/hwdegroot/secret-sharing/-/issues"
-    },
-    "nodemonConfig": {
-        "ext": "ts,js,html,htm,css"
-    },
-    "devDependencies": {
-        "@babel/plugin-transform-typescript": "^7.18.1",
-        "@rollup/plugin-babel": "^5.3.1",
-        "@rollup/plugin-commonjs": "^22.0.0",
-        "@rollup/plugin-multi-entry": "^4.1.0",
-        "@rollup/plugin-node-resolve": "^13.3.0",
-        "@rollup/plugin-typescript": "^8.3.2",
-        "babel-plugin-module-resolver": "^4.1.0",
-        "nodemon": "^2.0.15",
-        "rollup": "^2.74.1",
-        "tailwindcss": "^3.0.22"
-    },
-    "dependencies": {
-        "axios": "^0.27.2"
-    }
+  "name": "secret-sharing",
+  "version": "1.2.2",
+  "description": "Share your secrets, safely",
+  "browser": "wsgi_app/static/dist/js/utility.js",
+  "scripts": {
+    "watch": "nodemon --watch src --watch wsgi_app/templates --exec 'npm run build'",
+    "build:css": "tailwindcss -i src/main.tailwind -o wsgi_app/static/dist/css/main.css",
+    "build:js": "rollup -c",
+    "build": "npm run build:css && npm run build:js",
+    "heroku-postbuild": "npm run buiild"
+  },
+  "author": "Rik de Groot",
+  "license": "MIT",
+  "engines": {
+    "node": "18.x",
+    "npm": "8.x"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/hwdegroot/secret-sharing/-/issues"
+  },
+  "nodemonConfig": {
+    "ext": "ts,js,html,htm,css"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-typescript": "^7.18.1",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-multi-entry": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.2",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "nodemon": "^2.0.15",
+    "rollup": "^2.74.1",
+    "tailwindcss": "^3.0.22"
+  },
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
 }
