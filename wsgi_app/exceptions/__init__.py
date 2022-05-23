@@ -16,3 +16,7 @@ class SecretExpiredException(Exception):
 
 class DatabaseConnectionNotConfiguredException(Exception):
     pass
+
+
+class NotProductionException(Exception):
+    pass

@@ -7,7 +7,7 @@ COPY Pipfile /tmp/Pipfile
 COPY Pipfile.lock /tmp/Pipfile.lock
 
 RUN apk add --update --no-cache --virtual .build-deps curl jq
-RUN apk add bash
+RUN apk add bash git
 
 # Find the latest release of delta, for fancy diffing
 RUN curl -sSL -H"Accept: application/vnd.github.v3+json" "https://api.github.com/repos/dandavison/delta/releases?per_page=1" | \
@@ -36,6 +36,7 @@ RUN pip install -r /tmp/requirements.txt
 # remove dependency file
 RUN apk del .build-deps
 RUN rm -rf /tmp/Pipfile /tmp/Pipfile.lock /tmp/requirements.txt
+RUN git config --global --add safe.directory /var/current
 
 WORKDIR /var/current
 

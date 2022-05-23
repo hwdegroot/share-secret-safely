@@ -458,7 +458,15 @@ elif [[ -e "$RELEASE_NOTES_FILE" ]]; then
     RELEASE_NOTES="$(cat "$RELEASE_NOTES_FILE")"
 fi
 
-git add package{,-lock}.json
+cat <<- APPVERSION > wsgi_app/appversion.json
+{
+    "version": "v${NEXT_VERSION}",
+    "sha": "$(git rev-parse HEAD)",
+    "description": "$(echo $RELEASE_NOTES | awk -v ORS='\\r\\n' '1')"
+}
+APPVERSION
+
+git add package{,-lock}.json wsgi_app/appversion.json
 git commit -m "[RELEASE] bump version: $CURRENT_VERSION -> $NEXT_VERSION $EXTRA_MESSAGE
 
 $RELEASE_NAME"

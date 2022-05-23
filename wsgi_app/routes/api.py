@@ -4,7 +4,9 @@ from flask import (
     request,
     url_for,
 )
+import json
 import os
+import subprocess
 from wsgi_app import app
 from .utils import (
     create_secret_link,
@@ -13,9 +15,10 @@ from .utils import (
 )
 from wsgi_app.exceptions import (
     InvalidSecretIdentifierException,
+    NotProductionException,
     SecretNotFoundException,
     SecretAlreadyViewedException,
-    SecretExpiredException
+    SecretExpiredException,
 )
 
 API_PREFIX = "/api/v1"
@@ -74,3 +77,32 @@ def api_get_secret(secret_id):
     return jsonify({
         "secret": secret
     }), 200
+
+
+@app.route("/api/version", methods=["GET"])
+def get_version():
+    try:
+        if os.getenv("NODE_ENV", "").lower() != "production":
+            raise NotProductionException("not on production")
+
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "appversion.json")) as appversionfile:
+            appversion = json.load(appversionfile)
+    except (FileNotFoundError, NotProductionException) as fnfe:
+        revision = subprocess.check_output([
+            'git',
+            'rev-parse',
+            'HEAD'
+        ]).decode('ascii').strip()
+        appversion = {
+            "version": "dev",
+            "sha": f"dev-{revision}",
+            "description": None
+        }
+    except Exception as e:
+        appversion = {
+            "version": "dev",
+            "sha": "dev",
+            "description": None
+        }
+
+    return jsonify(appversion), 200
