@@ -1,6 +1,6 @@
 {
   "name": "secret-sharing",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Share your secrets, safely",
   "browser": "wsgi_app/static/dist/js/utility.js",
   "scripts": {
