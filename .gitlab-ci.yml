@@ -3,6 +3,7 @@ stages:
     - test
     - build
     - deploy
+    - release
 
 # python template
 .python:
@@ -67,6 +68,17 @@ test:unit:
             - coverage/
             - .coverage
 
+build:
+    image: node
+    stage: build
+    script:
+        - npm install
+        - npm run build
+    artifacts:
+        name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+        paths:
+            - wsgi_app/static/dist
+
 pages:
     stage: deploy
     image: alpine
@@ -80,19 +92,42 @@ pages:
     only:
         - main
 
-build:css:
-    image: node
-    stage: build
+heroku:deploy:
+    stage: release
+    image: ruby:latest
+    dependencies:
+        - build
+    before_script:
+        - apt-get update -qy
+        - apt-get install -y ruby-dev
+        - gem install dpl
     script:
-        - npm install
-        - npx tailwindcss -i wsgi_app/static/src/main.tailwind -o wsgi_app/static/css/main.css
+        - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+    only:
+        - tags
 
-    artifacts:
-        name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
-        paths:
-            - wsgi_app/static/
-        exclude:
-            - wsgi_app/static/src/
+release:
+    image: alpine
+    stage: release
+    only:
+        - tags
+    before_script:
+        - apk add --update curl jq git
+    script:
+        - export RELEASE_DESCRIPTION="$(git tag --list "$CI_COMMIT_TAG" --format '%(contents:body)')"
+        - export RELEASE_NAME="$(git tag --list "$CI_COMMIT_TAG" --format '%(contents:subject)' | awk -v ORS='\\r\\n' '1')"
+        - cat templates/release-template.json
+          | sed "s/{{TAG}}/$CI_COMMIT_TAG/g"
+          | sed "s/{{RELEASE_NAME}}/$RELEASE_NAME/g"
+          | sed "s/{{RELEASE_DESCRIPTION}}/$RELEASE_DESCRIPTION/g" > /tmp/release.$CI_COMMIT_TAG.json
+        - cat /tmp/release.$CI_COMMIT_TAG.json
+        - curl
+          --fail
+          --header "Content-Type:application/json"
+          --header "JOB-TOKEN:$CI_JOB_TOKEN"
+          --data @/tmp/release.$CI_COMMIT_TAG.json
+          --request POST
+          https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/releases
 
 sast:
     stage: test

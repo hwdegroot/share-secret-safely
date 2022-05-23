@@ -1,0 +1,7 @@
+{
+    "name": "{{RELEASE_NAME}}",
+    "tag_name": "{{TAG}}",
+    "description": "{{RELEASE_DESCRIPTION}}",
+    "milestones": []
+}
+
