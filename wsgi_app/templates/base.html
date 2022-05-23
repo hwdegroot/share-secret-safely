@@ -7,7 +7,7 @@
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     {% include "partials/meta-og.html" %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/main.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
@@ -72,7 +72,13 @@
             </div>
         </div>
     </div>
-    <script language="javascript" src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.0/axios.min.js"
+        integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+    </script>
+    <script language="javascript" src="{{ url_for('static', filename='dist/js/utility.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

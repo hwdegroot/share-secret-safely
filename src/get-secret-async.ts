@@ -1,12 +1,14 @@
+import axios from "axios"
+
 document.addEventListener("DOMContentLoaded", function () {
-    let secretArea = document.getElementById("secret");
+    const secretArea: HTMLElement = document.getElementById("secret");
 
     if (secretArea) {
-        let accessToken = secretArea.getAttribute("data-access-token")
-        let secretId = secretArea.getAttribute("data-secret-id")
-        let button = document.getElementById("copy-secret")
-        let revealButton = document.getElementById("reveal-secret");
-        const classList = Array.from(button.classList)
+        const accessToken: string = secretArea.getAttribute("data-access-token")
+        const secretId: string = secretArea.getAttribute("data-secret-id")
+        const button: HTMLInputElement = document.getElementById("copy-secret") as HTMLInputElement
+        const revealButton: HTMLInputElement = document.getElementById("reveal-secret") as HTMLInputElement
+        const classList: Array<string> = Array.from(button.classList)
         if (revealButton) {
             secretArea.classList.remove("reveal");
         }

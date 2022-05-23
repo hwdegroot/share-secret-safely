@@ -1,23 +1,23 @@
 document.addEventListener('DOMContentLoaded', function() {
     let matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
-    let systemDarkmode = matchMedia && matchMedia.matches
-    let sessionDarkmode = sessionStorage.getItem('preferredColorScheme')
-    let darkmodeEnabled = sessionDarkmode ? sessionDarkmode == 'dark' : systemDarkmode
+    let systemDarkmode: boolean = matchMedia && matchMedia.matches
+    let sessionDarkmode: string = sessionStorage.getItem('preferredColorScheme')
+    let darkmodeEnabled: boolean = sessionDarkmode ? sessionDarkmode == 'dark' : systemDarkmode
 
-    function setDarkmodeState(newState) {
-        let darkmodeState = document.getElementById('darkmodeState')
+    const setDarkmodeState = (newState: boolean): void => {
+        let darkmodeState: HTMLInputElement = document.getElementById('darkmodeState') as HTMLInputElement
         darkmodeState.checked = !!newState
         setDarkmodeClass(!!newState)
         let preferredColorScheme = !!newState ? 'dark' : 'light'
         sessionStorage.setItem('preferredColorScheme', preferredColorScheme)
     }
 
-    function getDarkmodeState() {
-        let darkmodeState = document.getElementById('darkmodeState')
+    const getDarkmodeState = (): boolean => {
+        let darkmodeState: HTMLInputElement = document.getElementById('darkmodeState') as HTMLInputElement
         return darkmodeState.checked
     }
 
-    function setDarkmodeClass(darkmodeEnabled) {
+    const setDarkmodeClass = (darkmodeEnabled: boolean | string): void => {
         if (darkmodeEnabled) {
             document.body.classList.add('dark')
         } else {
