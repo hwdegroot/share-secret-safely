@@ -163,7 +163,7 @@ if [[ "$(git rev-parse --abbrev-ref @)" != "main" ]]; then
 
     warn "You are trying to release from a branch other than 'main'"
     read -p "Are you sure you want to continue? [y/N] " RELEASE_NOT_MAIN
-    if ! [[ "$RELEASE_NOT_MAIN" =~ ^[yY] ]]; then
+    if ! [[ "${RELEASE_NOT_MAIN##*( )}" =~ ^[yY] ]]; then
         exit 2
     fi
 fi
@@ -185,9 +185,9 @@ if ! [[ -z "${UP_TO_DATE}" ]]; then
 
     echo $CONTINUE
 
-    if [[ "$CONTINUE" =~ ^[pP] ]]; then
+    if [[ "${CONTINUE##*( )}" =~ ^[pP] ]]; then
         git pull
-    elif [[ "$CONTINUE" =~ ^[cC] ]]; then
+    elif [[ "${CONTINUE##*( )}" =~ ^[cC] ]]; then
         read -p "Continuing without pulling. Are you sure? Press Ctrl+C to cancel" SURE
         break
     else
@@ -253,7 +253,7 @@ next_stage () {
 }
 
 allowed_stages () {
-    local c="$1"
+    local c="${1##*( )}"
 
     if [[ -z "$c" ]]; then
         echo  "^[aAbBrRfF]"
@@ -279,13 +279,13 @@ select_stage_type () {
         exit 2
     fi
 
-    if [[ "$NEXT_STAGE" =~ ^[fF] ]]; then
+    if [[ "${NEXT_STAGE##*( )}" =~ ^[fF] ]]; then
         echo "final"
-    elif [[ "$NEXT_STAGE" =~ ^[aA] ]]; then
+    elif [[ "${NEXT_STAGE##*( )}" =~ ^[aA] ]]; then
         echo "alpha"
-    elif [[ "$NEXT_STAGE" =~ ^[bB] ]]; then
+    elif [[ "${NEXT_STAGE##*( )}" =~ ^[bB] ]]; then
         echo "beta"
-    elif [[ "$NEXT_STAGE" =~ ^[rR] ]]; then
+    elif [[ "${NEXT_STAGE##*( )}" =~ ^[rR] ]]; then
         echo "rc"
     else
         error "Invalid stage"
@@ -295,7 +295,7 @@ select_stage_type () {
 
 ## For Major, minor and patches, release current version without stage
 # when current build is staged build
-if [[ "$RELEASE_TYPE" =~ ^(major|minor|patch)$ ]] && [[ "$IS_STAGED_BUILD" == "true" ]]; then
+if [[ "$RELEASE_TYPE" =~ ^(major|minor|patch)$ ]] && [[ "$IS_STAGED_BUILD" == "true" ]] && [[ "$INTERACTIVE" == "false" ]]; then
     if [[ "$RELEASE_TYPE" == "major" ]]; then
         if [[ "$MINOR" == "0" ]] && [[ "$PATCH" == "0" ]]; then
             NEXT_VERSION="$((MAJOR)).0.0"
@@ -375,7 +375,7 @@ if [[ -d "$INSTALL_DIR" ]]; then
         WIPE_FIRST=y
     fi
 
-    if [[ "$WIPE_FIRST" =~ ^[yY] ]]; then
+    if [[ "${WIPE_FIRST##*( )}" =~ ^[yY] ]]; then
         rm -rf "$INSTALL_DIR"
     else
         exit 1
@@ -389,6 +389,12 @@ cleanup () {
     rm -rf $INSTALL_DIR
 }
 
+reset_deploy_and_exit () {
+    cleanup
+    git checkout -- package{,-lock}.json wsgi_app/appversion.json
+    exit 1
+}
+
 mkdir -p $INSTALL_DIR
 PACKAGE_JSON=$INSTALL_DIR/package.json
 PACKAGE_LOCK_JSON=$INSTALL_DIR/package-lock.json
@@ -396,7 +402,7 @@ jq -r --arg nv "$NEXT_VERSION" '.version |= $nv' package.json > $PACKAGE_JSON
 jq -r --arg nv "$NEXT_VERSION" '.version |= $nv' package-lock.json > $PACKAGE_LOCK_JSON
 
 ## Use trap to clean up the environment on exit, quit or error
-trap cleanup ERR SIGINT EXIT
+trap reset_deploy_and_exit ERR SIGINT EXIT
 ## Change dir and run npm install to fix the files
 pushd $INSTALL_DIR
 info "Using npm install to apply updated version"
@@ -405,24 +411,6 @@ popd
 
 mv $PACKAGE_JSON package.json
 mv $PACKAGE_LOCK_JSON package-lock.json
-
-cat <<- CHANGES
-Please review the diff
------8<-----------8<------
-CHANGES
-git --no-pager diff --minimal -- package{,-lock}.json
-echo "-----8<-----------8<------"
-
-if [[ "$INTERACTIVE" == "true" ]]; then
-    read -p "Do the changes look good? [Y/n] " APPLY_CHANGES
-else
-    APPLY_CHANGES=y
-fi
-
-if [[ "$APPLY_CHANGES" =~ ^[nN] ]]; then
-    git checkout -- package{,-lock}.json
-    exit 1
-fi
 
 # add optional commit message extend
 if [[ -z "$RELEASE_NAME" ]]; then
@@ -436,7 +424,7 @@ fi
 
 if [[ ! -e "$RELEASE_NOTES_FILE" ]] && [[ "$INTERACTIVE" == "true" ]]; then
     read -p "Add release notes? (use <Enter> <Ctrl-D> to continue when done) [Y/n] " RN
-    if [[ $RN =~ ^[yY] ]] || [[ -z "$RN" ]]; then
+    if [[ "${RN##*( )}" =~ ^[yY] ]] || [[ -z "$RN" ]]; then
         echo ""
         echo "-----------8<-------8<---------------"
         __=""
@@ -458,13 +446,33 @@ elif [[ -e "$RELEASE_NOTES_FILE" ]]; then
     RELEASE_NOTES="$(cat "$RELEASE_NOTES_FILE")"
 fi
 
+echo "$RELEASE_NOTES"
 cat <<- APPVERSION > wsgi_app/appversion.json
 {
     "version": "v${NEXT_VERSION}",
     "sha": "$(git rev-parse HEAD)",
-    "description": "$(echo $RELEASE_NOTES | awk -v ORS='\\r\\n' '1')"
+    "description": "$(echo "$RELEASE_NOTES" | awk -v ORS='\\r\\n' '1')"
 }
 APPVERSION
+cat <<- CHANGES
+Please review the diff
+-----8<-----------8<------
+CHANGES
+git --no-pager diff --minimal -- package{,-lock}.json wsgi_app/appversion.json
+echo "-----8<-----------8<------"
+
+if [[ "$INTERACTIVE" == "true" ]]; then
+    read -p "Do the changes look good? [Y/n] " APPLY_CHANGES
+else
+    APPLY_CHANGES=y
+fi
+
+if [[ "${APPLY_CHANGES##*( )}" =~ ^[nN] ]]; then
+    error "Quit deploment"
+    reset_deploy_and_exit
+fi
+
+exit 1
 
 git add package{,-lock}.json wsgi_app/appversion.json
 git commit -m "[RELEASE] bump version: $CURRENT_VERSION -> $NEXT_VERSION $EXTRA_MESSAGE
@@ -479,7 +487,7 @@ echo "Run 'git push' and 'git push --tags' to get the release deployed"
 
 read -p "Want to push the release right now? [y/N] " PUSH_RELEASE
 
-if [[ "$PUSH_RELEASE" =~ ^[yY] ]]; then
+if [[ "${PUSH_RELEASE##*( )}" =~ ^[yY] ]]; then
     git push
     git push --tags
 fi
