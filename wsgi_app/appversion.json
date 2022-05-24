@@ -1,5 +1,6 @@
 {
-    "version": "v2.0.1-rc1",
-    "sha": "09778bc8aba280fbbbcceec08e8381d96fa65541",
-    "description": "babel.config.js bump-version.sh coverage docker-compose.yaml Dockerfile gunicorn.sh junit.xml LICENSE Makefile node_modules npm-run.sh package.json package-lock.json Pipfile Pipfile.lock Procfile README.md requirements-base.txt rollup.config.js run.sh runtime.txt src tailwind.config.js templates test tsconfig.json wsgi_app Fix release docs babel.config.js bump-version.sh coverage docker-compose.yaml Dockerfile gunicorn.sh junit.xml LICENSE Makefile node_modules npm-run.sh package.json package-lock.json Pipfile Pipfile.lock Procfile README.md requirements-base.txt rollup.config.js run.sh runtime.txt src tailwind.config.js templates test tsconfig.json wsgi_app Update version endpoint\r\n"
+    "version": "v2.0.1-rc2",
+    "build": "rc2",
+    "sha": "d3aa58f507478523e83a47a9a76fbbdcbbb1aa58",
+    "description": "* Add build number to api version\n* Improve build script\n\n"
 }
