@@ -47,7 +47,7 @@ class PasswordEncodingTest(unittest.TestCase):
         SECRET = "secret_3 30"
         token = cipher.encrypt(bytes(SECRET, "utf-8"))
         # Create a secret object from the string
-        secret = Secret(bytes.decode(token))
+        secret = Secret(token)
         # actually store the secret
         db.session.add(secret)
         secret_value = obtain_secret(secret.id)
@@ -59,7 +59,7 @@ class PasswordEncodingTest(unittest.TestCase):
         SECRET = "secret_3 30"
         token = cipher.encrypt(bytes(SECRET, "utf-8"))
         # Create a secret object from the string
-        secret = Secret(bytes.decode(token))
+        secret = Secret(token)
         # actually store the secret
         db.session.add(secret)
         secret_value = obtain_secret(secret.id)

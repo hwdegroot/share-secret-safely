@@ -36,8 +36,7 @@ def store_secret(secret_value, ttl=None):
     token = cipher.encrypt(bytes(secret_value, "utf-8"))
 
     # Create a secret object from the string
-    secret = Secret(bytes.decode(token), ttl=ttl)
-
+    secret = Secret(token, ttl=ttl)
     # actually store the secret
     db.session.add(secret)
     db.session.commit()
@@ -62,7 +61,7 @@ def obtain_secret(secret_id, verify=False):
         raise SecretAlreadyViewedException(403)
 
     try:
-        secret_value = cipher.decrypt(secret.encoded_secret.encode(), ttl=secret.ttl)
+        secret_value = cipher.decrypt(secret.encoded_secret, ttl=secret.ttl)
     except InvalidToken:
         if not verify:
             secret.encoded_secret = None
