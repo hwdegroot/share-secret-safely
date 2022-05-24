@@ -81,6 +81,12 @@ def api_get_secret(secret_id):
 
 @app.route("/api/version", methods=["GET"])
 def get_version():
+    appversion = {
+        "version": "dev",
+        "build": None,
+        "sha": "dev",
+        "description": None
+    }
     try:
         if os.getenv("NODE_ENV", "").lower() != "production":
             raise NotProductionException("not on production")
@@ -93,16 +99,8 @@ def get_version():
             'rev-parse',
             'HEAD'
         ]).decode('ascii').strip()
-        appversion = {
-            "version": "dev",
-            "sha": f"dev-{revision}",
-            "description": None
-        }
+        appversion["sha"] = f"dev-{revision}"
     except Exception as e:
-        appversion = {
-            "version": "dev",
-            "sha": "dev",
-            "description": None
-        }
+        pass
 
     return jsonify(appversion), 200

@@ -446,12 +446,16 @@ elif [[ -e "$RELEASE_NOTES_FILE" ]]; then
     RELEASE_NOTES="$(cat "$RELEASE_NOTES_FILE")"
 fi
 
-echo "$RELEASE_NOTES"
+BUILD="null"
+if ! [[ -z "$NEXT_STAGE" ]]; then
+    BUILD="\"$NEXT_STAGE\""
+fi
 cat <<- APPVERSION > wsgi_app/appversion.json
 {
     "version": "v${NEXT_VERSION}",
+    "build": $BUILD,
     "sha": "$(git rev-parse HEAD)",
-    "description": "$(echo "$RELEASE_NOTES" | awk -v ORS='\\r\\n' '1')"
+    "description": "$(echo "$RELEASE_NOTES" | awk -v ORS='\\n' '1')"
 }
 APPVERSION
 cat <<- CHANGES
@@ -471,8 +475,6 @@ if [[ "${APPLY_CHANGES##*( )}" =~ ^[nN] ]]; then
     error "Quit deploment"
     reset_deploy_and_exit
 fi
-
-exit 1
 
 git add package{,-lock}.json wsgi_app/appversion.json
 git commit -m "[RELEASE] bump version: $CURRENT_VERSION -> $NEXT_VERSION $EXTRA_MESSAGE
