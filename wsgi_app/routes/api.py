@@ -85,7 +85,7 @@ def get_version():
         "version": "dev",
         "build": None,
         "sha": "dev",
-        "description": None
+        "description": "Development version. \nShould not be visible on production"
     }
     try:
         if os.getenv("NODE_ENV", "").lower() != "production":
