@@ -8,7 +8,7 @@ class Secret(db.Model):
     __tablename__ = 'secrets'
 
     id = db.Column(UUID(as_uuid=True), primary_key=True)
-    encoded_secret = db.Column(db.UnicodeText, nullable=True)
+    encoded_secret = db.Column(db.LargeBinary, nullable=True)
     ttl = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
