@@ -1,6 +1,6 @@
 {
-    "version": "v2.0.1-rc2",
-    "build": "rc2",
-    "sha": "d3aa58f507478523e83a47a9a76fbbdcbbb1aa58",
-    "description": "* Add build number to api version\n* Improve build script\n\n"
+    "version": "v3.0.0",
+    "build": null,
+    "sha": "0e622a7a6a5ae1475986542ad96ca2d840ed6b19",
+    "description": "* Use LargeBinary in the database for encoded_secret\n\n"
 }
