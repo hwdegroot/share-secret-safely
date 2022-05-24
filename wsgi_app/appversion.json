@@ -1,5 +1,5 @@
 {
-    "version": "v1.2.4",
-    "sha": "6c541780b19517419d8109f5455631f661fcbd99",
-    "description": "\r\n"
+    "version": "v2.0.0",
+    "sha": "bb8874a930489347e9ec018d21edd309ae4edede",
+    "description": "babel.config.js bump-version.sh coverage docker-compose.yaml Dockerfile gunicorn.sh junit.xml LICENSE Makefile node_modules npm-run.sh package.json package.json.orig package-lock.json Pipfile Pipfile.lock Procfile README.md requirements-base.txt rollup.config.js run.sh runtime.txt src tailwind.config.js templates test tsconfig.json wsgi_app Add autodeploy to heroku babel.config.js bump-version.sh coverage docker-compose.yaml Dockerfile gunicorn.sh junit.xml LICENSE Makefile node_modules npm-run.sh package.json package.json.orig package-lock.json Pipfile Pipfile.lock Procfile README.md requirements-base.txt rollup.config.js run.sh runtime.txt src tailwind.config.js templates test tsconfig.json wsgi_app Add version api\r\n"
 }
