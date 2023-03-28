@@ -19,6 +19,10 @@ class Factory:
     def get_database_url(self):
         # When a fully wualified db url is defined we use that
         # else we build it ourselves
+
+        if os.getenv("DATABASE_URL") is not None:
+            return os.getenv("DATABASE_URL")
+
         if (
             os.getenv("POSTGRES_USER") is not None and
             os.getenv("POSTGRES_PASSWORD") is not None and
@@ -33,9 +37,6 @@ class Factory:
             db_database = os.getenv("POSTGRES_DB")
 
             return f"postgresql://{db_user}:{db_passwd}@{db_host}:{db_port}/{db_database}"
-
-        if os.getenv("DATABASE_URL") is not None:
-            return os.getenv("DATABASE_URL")
 
         raise DatabaseConnectionNotConfiguredException(
             "Set the database connection string variables")
