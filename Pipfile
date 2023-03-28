@@ -26,7 +26,7 @@ pycparser = "2.21"
 python-dotenv = "0.19.2"
 secretsharing = "0.2.6"
 SQLAlchemy = "1.4.31"
-Werkzeug = "2.0.3"
+Werkzeug = "2.2.3"
 
 [dev-packages]
 autopep8 = "1.6.0"
