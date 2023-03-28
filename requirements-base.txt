@@ -31,7 +31,7 @@ python-dotenv==0.20.0
 rfc3986[idna2008]==1.5.0
 secretsharing==0.2.6
 sentry-sdk[flask,httpx,sqlalchemy]==1.5.12
-setuptools==62.3.2
+setuptools==65.5.1
 sniffio==1.2.0
 sqlalchemy==1.4.36
 urllib3==1.26.9
