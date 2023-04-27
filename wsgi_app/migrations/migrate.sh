@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 echo "===== Initalize the database ====="
+flask db stamp head
 if ! [[ -d wsgi_app/migrations ]]; then
     flask db init
 else

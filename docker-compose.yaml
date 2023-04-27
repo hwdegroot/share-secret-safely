@@ -19,7 +19,7 @@ services:
             interval: 3s
             retries: 10
     npm:
-        image: node
+        image: node:18
         command: ["/var/current/npm-run.sh", "--serve"]
         working_dir: /var/current
         volumes:

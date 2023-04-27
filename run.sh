@@ -7,6 +7,7 @@ if ! [[ -d wsgi_app/migrations ]]; then
 fi
 # run migrations
 echo "========= Run all migrations ============"
+flask db stamp head
 flask db migrate
 # upgrade db
 echo "========= Upgrade DB ===================="
@@ -16,7 +17,7 @@ flask db upgrade
 echo "========= Run the app ==================="
 
 if [[ "FLASK_ENV" = "production" ]] || [[ "ENVIRONMENT" = "production" ]]; then
-    ./gunicorn.sh --bind=0.0.0.0:8080
+    bash `dirname $0 `/gunicorn.sh --bind=0.0.0.0:8080 wsgi_app:app
 else
     flask run
 fi

@@ -130,28 +130,17 @@ sentry_sdk.init(
 )
 ```
 
-## Heroku
+## Serving from docker behind nginx proxy
 
-### local
+```
+location ~ / {
+    proxy_pass http://127.0.0.1:8080;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Host $server_name;
+    proxy_set_header X-Http-Referrer $http_referrer;
+}
+```
 
-    pipenv install
-    pipenv shell
-    heroku local web --env=.env.local
 
-### Remote
-
-The following config vars should be set (use `heroku config:se VAR=value -a <app_name>`)
-
-    APP_SECRET_KEY
-    DATABASE_URL
-    ENCRYPTION_SALT
-    FLASK_APP: wsgi_app
-    NODE_MODULES_CACHE: true
-    NPM_CONFIG_PRODUCTION: true
-    POSTGRES_DB
-    POSTGRES_HOST
-    POSTGRES_PASSWORD
-    POSTGRES_PORT
-    POSTGRES_USER
-    SQLALCHEMY_TRACK_MODIFICATIONS: False
-    USE_NPM_INSTALL: true

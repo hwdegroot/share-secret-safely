@@ -36,7 +36,8 @@ class Factory:
             db_port = os.getenv("POSTGRES_PORT")
             db_database = os.getenv("POSTGRES_DB")
 
-            return f"postgresql://{db_user}:{db_passwd}@{db_host}:{db_port}/{db_database}"
+            conn_string = f"postgresql://{db_user}:{db_passwd}@{db_host}:{db_port}/{db_database}"
+            return conn_string
 
         raise DatabaseConnectionNotConfiguredException(
             "Set the database connection string variables")
@@ -47,10 +48,7 @@ class Factory:
 
     def get_db(self, app=None):
         if not hasattr(self, "db") or self.db is None:
-            self.db = SQLAlchemy()
-
-        if app is not None:
-            self.db.init_app(app)
+            self.db = SQLAlchemy(self.app)
 
         return self.db
 
