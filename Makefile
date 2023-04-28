@@ -1,7 +1,7 @@
 TAG := registry.gitlab.com/hwdegroot/secret-sharing:python-3.9
 
 run:
-	docker-compose up
+	docker-compose --env-file ${PWD}/.env.example up
 
 
 production:
