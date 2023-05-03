@@ -7,7 +7,7 @@ from flask import (
 import json
 import os
 import subprocess
-from wsgi_app import app
+from wsgi_app import (app, api)
 from .utils import (
     create_secret_link,
     store_secret,
@@ -26,7 +26,7 @@ API_PREFIX = "/api/v1"
 DAY_IN_SECONDS = 3600 * 24
 
 
-@app.route("/api/v1/secret/store", methods=["POST"])
+@api.route("/api/v1/secret/store", methods=["POST"])
 def api_store():
     """
     Check if the secret is more than just a space
@@ -52,7 +52,7 @@ def api_store():
     }), 201
 
 
-@app.route("/api/v1/secret/<uuid:secret_id>", methods=["GET"])
+@api.route("/api/v1/secret/<uuid:secret_id>", methods=["GET"])
 def api_get_secret(secret_id):
     try:
         secret = obtain_secret(secret_id)
@@ -79,7 +79,7 @@ def api_get_secret(secret_id):
     }), 200
 
 
-@app.route("/api/version", methods=["GET"])
+@api.route("/api/version", methods=["GET"])
 def get_version():
     appversion = {
         "version": "dev",

@@ -28,6 +28,7 @@ app_factory = Factory(
 )
 # Under water this calls Flask(__name__)
 app = app_factory.create_app()
+api = app_factory.get_api()
 # Setup the session secret key
 app.secret_key = os.getenv("APP_SECRET_KEY")
 # Initialize the database

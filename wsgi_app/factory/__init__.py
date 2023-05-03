@@ -2,6 +2,7 @@ import os
 import sys
 import logging
 from flask import Flask
+from flask_hintful import FlaskHintful
 from flask.logging import default_handler
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
@@ -14,6 +15,7 @@ class Factory:
     '''
     jwt = None
     app = None
+    api = None
     db = None
 
     def get_database_url(self):
@@ -45,6 +47,7 @@ class Factory:
     def __init__(self, **kwargs):
         self.app = self.create_app(**kwargs)
         self.db = self.get_db()
+        self.api = self.get_api()
 
     def get_db(self, app=None):
         if not hasattr(self, "db") or self.db is None:
@@ -64,6 +67,7 @@ class Factory:
         self.app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
         self.app.config["JWT_TOKEN_LOCATION"] = ["headers", "query_string"]
         self.jwt = JWTManager(self.app)
+        self.api = FlaskHintful(self.app)
 
         self.db = self.get_db(self.app)
 
@@ -72,6 +76,12 @@ class Factory:
                 self.db.create_all()
 
         return self.app
+
+    def get_api(self):
+        if self.api is None and self.app is not None:
+            self.api = FlaskHintful(self.app)
+
+        return self.api
 
     def get_logger(self):
         for logger in (
