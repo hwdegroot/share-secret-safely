@@ -1,4 +1,5 @@
 from flask import (
+    make_response,
     jsonify,
     redirect,
     request,
@@ -7,7 +8,12 @@ from flask import (
 import json
 import os
 import subprocess
-from wsgi_app import (app, api)
+from wsgi_app import api
+from wsgi_app.routes.models import (
+    SecretModel,
+    StoredSecretModel,
+    VersionModel,
+)
 from .utils import (
     create_secret_link,
     store_secret,
@@ -21,13 +27,12 @@ from wsgi_app.exceptions import (
     SecretExpiredException,
 )
 
-API_PREFIX = "/api/v1"
 
+API_PREFIX = "/api/v1"
 DAY_IN_SECONDS = 3600 * 24
 
-
 @api.route("/api/v1/secret/store", methods=["POST"])
-def api_store():
+def api_store() -> StoredSecretModel:
     """
     Check if the secret is more than just a space
     """
@@ -44,16 +49,21 @@ def api_store():
     secret_id = store_secret(secret, ttl=ttl)
     api_link = create_secret_link(secret_id, prefix=API_PREFIX)
     link = create_secret_link(secret_id)
-    return jsonify({
-        "id": secret_id,
-        "api_link": api_link,
-        "link": link,
-        "expires_after_days": expires_after,
-    }), 201
+    return make_response(
+        jsonify(
+            StoredSecretModel(
+                secret_id,
+                api_link,
+                link,
+                expires_after
+            )
+        ),
+        201
+    )
 
 
 @api.route("/api/v1/secret/<uuid:secret_id>", methods=["GET"])
-def api_get_secret(secret_id):
+def api_get_secret(secret_id) -> SecretModel:
     try:
         secret = obtain_secret(secret_id)
     except InvalidSecretIdentifierException:
@@ -74,19 +84,17 @@ def api_get_secret(secret_id):
             "error": f"Secret {secret_id} viewing has expired",
         }), 403
 
-    return jsonify({
-        "secret": secret
-    }), 200
+    return make_response(jsonify(SecretModel(secret)), 200)
 
 
 @api.route("/api/version", methods=["GET"])
-def get_version():
-    appversion = {
-        "version": "dev",
-        "build": None,
-        "sha": "dev",
-        "description": "Development version. \nShould not be visible on production"
-    }
+def get_version() -> VersionModel:
+    appversion = VersionModel(
+        version="dev",
+        build=None,
+        sha="dev",
+        description="Development version. \nShould not be visible on production"
+    )
     try:
         if os.getenv("NODE_ENV", "").lower() != "production":
             raise NotProductionException("not on production")
@@ -99,8 +107,8 @@ def get_version():
             'rev-parse',
             'HEAD'
         ]).decode('ascii').strip()
-        appversion["sha"] = f"dev-{revision}"
+        appversion.sha = f"dev-{revision}"
     except Exception as e:
         pass
 
-    return jsonify(appversion), 200
+    return make_response(jsonify(appversion), 200)
