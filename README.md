@@ -121,7 +121,7 @@ sentry_sdk.init(
     ],
     environment=os.getenv("SENTRY_ENVIRONMENT", "production"),
     max_breadcrumbs=50,
-    debug=os.getenv("SENTRY_ENVIRONMENT") != "production",
+    debug=os.getenv("SENTRY_ENVIRONMENT", "production") != "production",
     release=os.getenv("APP_VERSION", "dev"),
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
