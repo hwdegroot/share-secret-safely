@@ -5,6 +5,7 @@ from json import JSONEncoder
 @dataclass
 class SecretModel(JSONEncoder):
     secret: str
+    expires_after_days: int
 
     def __init__(self, secret):
         self.secret = secret
@@ -18,7 +19,7 @@ class StoredSecretModel(JSONEncoder):
     id: str =  None
     api_link: str = None
     link: str = None
-    expires_after_days: str = None
+    expires_after_days: int = None
 
     def __init__(
         self,

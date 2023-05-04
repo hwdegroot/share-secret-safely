@@ -32,7 +32,7 @@ API_PREFIX = "/api/v1"
 DAY_IN_SECONDS = 3600 * 24
 
 @api.route("/api/v1/secret/store", methods=["POST"])
-def api_store() -> StoredSecretModel:
+def api_store(model: SecretModel) -> StoredSecretModel:
     """
     Check if the secret is more than just a space
     """
