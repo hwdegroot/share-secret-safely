@@ -43,6 +43,6 @@ junitxml==0.7
 mock-alchemy==0.2.5
 nose==1.3.7
 pycodestyle==2.8.0
-requests==2.27.1
+requests==2.31.0
 six==1.16.0
 toml==0.10.2
