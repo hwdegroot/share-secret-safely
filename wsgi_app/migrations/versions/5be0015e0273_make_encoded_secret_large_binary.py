@@ -21,7 +21,8 @@ def upgrade():
     bind = op.get_bind()
     session = sa.orm.Session(bind=bind)
     connection = session.connection()
-    result = connection.execute("SELECT id, encoded_secret FROM secrets")
+    query = sa.text("SELECT id, encoded_secret FROM secrets")
+    result = connection.execute(query)
     secrets = {
         f"{str(x[0])}": x[1] if x[1] is not None else None
         for x in result
