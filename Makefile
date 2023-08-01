@@ -1,5 +1,3 @@
-TAG := registry.gitlab.com/hwdegroot/secret-sharing:python-3.9
-
 run:
 	docker compose --env-file ${PWD}/.env.example up
 
@@ -27,14 +25,14 @@ autoformat:
 		wsgi_app
 
 lint:
-	docker compose exec autopep8 \
+	docker compose exec app autopep8 \
 		--diff \
 		--exit-code \
 		--ignore e402 \
 		--max-line-length 100 \
 		--aggressive \
 		--aggressive \
-		--recursive kvk_api | \
+		--recursive wsgi_app | \
 			delta --paging never --line-numbers
 run-test:
 	docker compose exec app nosetests test/**/*Test.py \
@@ -48,10 +46,6 @@ run-test:
 
 wipe:
 	docker compose down --rmi all --volumes
-
-create_docker: build
-	docker build -t registry.gitlab.com/hwdegroot/secret-sharing . && \
-	docker push registry.gitlab.com/hwdegroot/secret-sharing
 
 recreate_requirements-base:
 	docker compose exec app pipenv lock -r --dev > requirements-base.txt

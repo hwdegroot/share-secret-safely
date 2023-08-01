@@ -7,8 +7,7 @@
     "watch": "nodemon --watch src --watch wsgi_app/templates --exec 'npm run build'",
     "build:css": "npx tailwindcss -i src/main.tailwind -o wsgi_app/static/dist/css/main.css",
     "build:js": "npx rollup --config rollup.config.js",
-    "build": "npm run build:css && npm run build:js",
-    "heroku-postbuild": "npm run build"
+    "build": "npm run build:css && npm run build:js"
   },
   "author": "Rik de Groot",
   "license": "MIT",
@@ -32,9 +31,10 @@
     "@rollup/plugin-multi-entry": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.2",
+    "autoprefixer": "^10.4.14",
     "axios": "^0.27.2",
     "babel-plugin-module-resolver": "^5.0.0",
     "rollup": "^2.74.1",
-    "tailwindcss": "^3.0.22"
+    "tailwindcss": "^3.3.3"
   }
 }
