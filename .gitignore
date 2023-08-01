@@ -8,5 +8,6 @@ node_modules/
 wsgi_app/static/dist/
 coverage/
 public/
+requirements.txt
 .coverage
 junit.xml
